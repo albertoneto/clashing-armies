@@ -115,7 +115,7 @@ namespace ClashingArmies
 
             Unit unit = new Unit
             {
-                type = unitType
+                UnitType = unitType
             };
 
             _unitsManager.AddUnit(unit);
