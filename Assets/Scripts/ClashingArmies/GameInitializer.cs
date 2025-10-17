@@ -13,7 +13,7 @@ namespace ClashingArmies
         [SerializeField]
         private UnitsManager unitsManager;
 
-        private void Awake()
+        private void Start()
         {
             foreach (var spawner in spawners)
             {

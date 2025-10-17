@@ -51,8 +51,6 @@ namespace ClashingArmies
 
             objectToSpawn.transform.SetParent(parent);
             objectToSpawn.transform.position = position;
-            var pos = objectToSpawn.transform.localPosition;
-            objectToSpawn.transform.localPosition = new Vector3(pos.x, pos.y, 0);
             objectToSpawn.SetActive(true);
 
             return objectToSpawn;
