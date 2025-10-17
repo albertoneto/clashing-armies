@@ -3,14 +3,8 @@ using UnityEngine;
 
 namespace ClashingArmies.Units
 {
-    public class Unit
+    public partial class UnitsManager : MonoBehaviour
     {
-        public UnitsManager.UnitType UnitType;
-    }
-    public class UnitsManager : MonoBehaviour
-    {
-        public enum UnitType{Red, Green, Blue, Yellow}
-        
         private readonly List<Unit> _units = new();
 
         public void AddUnit(Unit unit)

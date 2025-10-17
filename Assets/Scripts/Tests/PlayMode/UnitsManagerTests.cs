@@ -28,7 +28,7 @@ namespace ClashingArmies.Tests
         [Test]
         public void AddUnit_ShouldAddUnitToList()
         {
-            Unit unit = new Unit { UnitType = UnitsManager.UnitType.Red };
+            Unit unit = CreateUnit(UnitType.Red);
             unitsManager.AddUnit(unit);
 
             var unitsField = typeof(UnitsManager).GetField("_units", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
@@ -36,15 +36,15 @@ namespace ClashingArmies.Tests
 
             Assert.IsNotNull(unitsList);
             Assert.AreEqual(1, unitsList.Count);
-            Assert.AreEqual(UnitsManager.UnitType.Red, unitsList[0].UnitType);
+            Assert.AreEqual(UnitType.Red, unitsList[0].data.UnitType);
         }
 
         [Test]
         public void AddUnit_MultipleUnits_ShouldAddAllToList()
         {
-            Unit unit1 = new Unit { UnitType = UnitsManager.UnitType.Red };
-            Unit unit2 = new Unit { UnitType = UnitsManager.UnitType.Blue };
-            Unit unit3 = new Unit { UnitType = UnitsManager.UnitType.Green };
+            Unit unit1 = CreateUnit(UnitType.Red);
+            Unit unit2 = CreateUnit(UnitType.Blue);
+            Unit unit3 = CreateUnit(UnitType.Green);
 
             unitsManager.AddUnit(unit1);
             unitsManager.AddUnit(unit2);
@@ -55,18 +55,26 @@ namespace ClashingArmies.Tests
 
             Assert.IsNotNull(unitsList);
             Assert.AreEqual(3, unitsList.Count);
-            Assert.AreEqual(UnitsManager.UnitType.Red, unitsList[0].UnitType);
-            Assert.AreEqual(UnitsManager.UnitType.Blue, unitsList[1].UnitType);
-            Assert.AreEqual(UnitsManager.UnitType.Green, unitsList[2].UnitType);
+            Assert.AreEqual(UnitType.Red, unitsList[0].data.UnitType);
+            Assert.AreEqual(UnitType.Blue, unitsList[1].data.UnitType);
+            Assert.AreEqual(UnitType.Green, unitsList[2].data.UnitType);
+        }
+
+        private static Unit CreateUnit(UnitType type)
+        {
+            Unit redUnit = new Unit();
+            redUnit.data = ScriptableObject.CreateInstance<UnitData>();
+            redUnit.data.UnitType = type;
+            return redUnit;
         }
 
         [Test]
         public void UnitType_ShouldHaveAllExpectedValues()
         {
-            Assert.IsTrue(System.Enum.IsDefined(typeof(UnitsManager.UnitType), UnitsManager.UnitType.Red));
-            Assert.IsTrue(System.Enum.IsDefined(typeof(UnitsManager.UnitType), UnitsManager.UnitType.Green));
-            Assert.IsTrue(System.Enum.IsDefined(typeof(UnitsManager.UnitType), UnitsManager.UnitType.Blue));
-            Assert.IsTrue(System.Enum.IsDefined(typeof(UnitsManager.UnitType), UnitsManager.UnitType.Yellow));
+            Assert.IsTrue(System.Enum.IsDefined(typeof(UnitType), UnitType.Red));
+            Assert.IsTrue(System.Enum.IsDefined(typeof(UnitType), UnitType.Green));
+            Assert.IsTrue(System.Enum.IsDefined(typeof(UnitType), UnitType.Blue));
+            Assert.IsTrue(System.Enum.IsDefined(typeof(UnitType), UnitType.Yellow));
         }
     }
 }

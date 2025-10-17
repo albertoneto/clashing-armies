@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ebcf2b167884ee580110a2a9088e2cf, type: 3}
+  m_Name: Blue Unit
+  m_EditorClassIdentifier: 
+  UnitType: 2
+  Material: {fileID: 2100000, guid: 06561daa07d7bab429d30d2ed2e09b52, type: 2}
+  Speed: 2
+  ChangeTargetTime: 5

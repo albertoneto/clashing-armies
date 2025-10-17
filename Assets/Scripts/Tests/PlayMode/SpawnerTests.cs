@@ -38,11 +38,11 @@ namespace ClashingArmies.Tests
         private void SetupSpawner()
         {
             var unitsField = typeof(Spawner).GetField("units", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var unitsList = new System.Collections.Generic.List<UnitsManager.UnitType>
-            {
-                UnitsManager.UnitType.Red,
-                UnitsManager.UnitType.Blue
-            };
+            var unitsList = new System.Collections.Generic.List<UnitData>();
+            var redUnit = CreateUnit(UnitType.Red);
+            unitsList.Add(redUnit.data);
+            var blueUnit = CreateUnit(UnitType.Blue);
+            unitsList.Add(blueUnit.data);
             unitsField.SetValue(spawner, unitsList);
             
             var timeBetweenSpawnsField = typeof(Spawner).GetField("timeBetweenSpawns",
@@ -52,6 +52,14 @@ namespace ClashingArmies.Tests
             var spawnOnStartField = typeof(Spawner).GetField("spawnOnStart",
                 System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             spawnOnStartField.SetValue(spawner, false);
+        }
+
+        private static Unit CreateUnit(UnitType type)
+        {
+            Unit redUnit = new Unit();
+            redUnit.data = ScriptableObject.CreateInstance<UnitData>();
+            redUnit.data.UnitType = type;
+            return redUnit;
         }
 
         [Test]
@@ -89,7 +97,8 @@ namespace ClashingArmies.Tests
             spawner.Initialize(poolingSystem, unitsManager);
             int initialCount = unitsManager.GetUnitCount();
             
-            spawner.SpawnUnit(UnitsManager.UnitType.Red);
+            Unit unit = CreateUnit(UnitType.Red);
+            spawner.SpawnUnit(unit.data);
             yield return null;
             
             int finalCount = unitsManager.GetUnitCount();
@@ -97,7 +106,7 @@ namespace ClashingArmies.Tests
             
             Unit lastUnit = unitsManager.GetLastUnit();
             Assert.IsNotNull(lastUnit, "Last unit should not be null");
-            Assert.AreEqual(UnitsManager.UnitType.Red, lastUnit.UnitType, "Incorrect unit type");
+            Assert.AreEqual(UnitType.Red, lastUnit.data.UnitType, "Incorrect unit type");
         }
 
         [UnityTest]
@@ -118,7 +127,7 @@ namespace ClashingArmies.Tests
         public void StartSpawning_WithNoUnits_ShouldLogWarning()
         {
             var unitsField = typeof(Spawner).GetField("units", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            unitsField.SetValue(spawner, new System.Collections.Generic.List<UnitsManager.UnitType>());
+            unitsField.SetValue(spawner, new System.Collections.Generic.List<UnitData>());
             
             spawner.Initialize(poolingSystem, unitsManager);
             

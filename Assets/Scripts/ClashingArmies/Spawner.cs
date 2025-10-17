@@ -8,7 +8,7 @@ namespace ClashingArmies
     public class Spawner : MonoBehaviour
     {
         [SerializeField] 
-        private List<UnitsManager.UnitType> units;
+        private List<UnitData> units;
         [SerializeField, Range(0, 100)] 
         private float timeBetweenSpawns = 2f;
         [SerializeField]
@@ -93,30 +93,20 @@ namespace ClashingArmies
         {
             if (units.Count == 0) return;
 
-            UnitsManager.UnitType unitType = units[Random.Range(0, units.Count)];
+            var unitType = units[Random.Range(0, units.Count)];
             SpawnUnit(unitType);
         }
 
-        public void SpawnUnit(UnitsManager.UnitType unitType)
+        public void SpawnUnit(UnitData unitData)
         {
             Vector3 spawnPosition = spawnPoint != null ? spawnPoint.position : transform.position;
             
-            GameObject unitObject = _poolingSystem.SpawnFromPool(
-                PoolingSystem.PoolType.Unit, 
-                spawnPosition, 
-                _unitsManager.gameObject.transform
-            );
+            Unit unit = new UnitBuilder(_poolingSystem, _unitsManager, unitData, spawnPosition)
+                .SetId(units.Count.ToString())
+                .SetUnitMaterial()
+                .SetUnitController()
+                .Build();
             
-            if (unitObject == null)
-            {
-                Debug.LogError($"[Spawner] Unable to get unit from pool.");
-                return;
-            }
-
-            Unit unit = new Unit
-            {
-                UnitType = unitType
-            };
 
             _unitsManager.AddUnit(unit);
         }
