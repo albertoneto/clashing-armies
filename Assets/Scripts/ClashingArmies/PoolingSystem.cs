@@ -34,7 +34,7 @@ namespace ClashingArmies
             }
         }
 
-        public GameObject SpawnFromPool(PoolType poolType, Vector3 position, Transform parent)
+        public GameObject SpawnFromPool(PoolType poolType, Vector3 position, Transform parent, string name = null)
         {
             if (!_poolDictionary.ContainsKey(poolType))
             {
@@ -51,6 +51,7 @@ namespace ClashingArmies
 
             objectToSpawn.transform.SetParent(parent);
             objectToSpawn.transform.position = position;
+            if(!string.IsNullOrEmpty(name)) objectToSpawn.name = name;
             objectToSpawn.SetActive(true);
 
             return objectToSpawn;
@@ -70,6 +71,7 @@ namespace ClashingArmies
                 return;
             }
 
+            objectToReturn.name = "pool object";
             objectToReturn.SetActive(false);
             objectToReturn.transform.parent = transform;
             _poolDictionary[poolTypes].Enqueue(objectToReturn);

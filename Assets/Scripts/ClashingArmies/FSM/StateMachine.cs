@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace ClashingArmies
         private IState _currentState;
         private bool _isTransitioning;
 
-        private readonly Dictionary<string, IState> _states = new();
+        private readonly Dictionary<Type, IState> _states = new();
 
         private void Update()
         {
@@ -24,39 +25,73 @@ namespace ClashingArmies
             _currentState.OnFixedUpdate();
         }
 
-        public void AddState(IState state)
+        private void OnDestroy()
         {
-            if (!_states.ContainsKey(state.GetStateName()))
+            _currentState?.OnExit();
+            _currentState = null;
+            _states.Clear();
+        }
+        
+        public void AddState<T>(T state) where T : IState
+        {
+            var type = typeof(T);
+            
+            if (_states.ContainsKey(type))
             {
-                _states.Add(state.GetStateName(), state);
+                Debug.LogWarning($"State already exists: {type.Name}");
+                return;
             }
+
+            _states.Add(type, state);
         }
 
-        public void SetState(string stateName)
+        public void SetState<T>() where T : IState
         {
-            if (_currentState != null && _currentState.GetStateName() == stateName)
+            var type = typeof(T);
+
+            if (IsInState<T>())
             {
-                Debug.Log("Already in state: " + stateName);
+                Debug.Log($"Already in state: {type.Name}");
                 return;
             }
 
             if (_isTransitioning)
             {
-                Debug.Log("Transition in progress. Can't set state: " + stateName);
+                Debug.LogWarning($"Transition in progress. Can't set state: {type.Name}");
                 return;
             }
 
-            if (!_states.ContainsKey(stateName))
+            if (!HasState<T>())
             {
-                Debug.LogWarning("State not found: " + stateName);
+                Debug.LogError($"State not found: {type.Name}. Did you forget to add it?");
                 return;
             }
 
             _isTransitioning = true;
             _currentState?.OnExit();
-            _currentState = _states[stateName];
+            _currentState = _states[type];
             _currentState.OnEnter();
             _isTransitioning = false;
+        }
+        
+        public bool IsInState<T>() where T : IState
+        {
+            return _currentState != null && _currentState.GetType() == typeof(T);
+        }
+
+        public bool HasState<T>() where T : IState
+        {
+            return _states.ContainsKey(typeof(T));
+        }
+
+        public T GetState<T>() where T : IState
+        {
+            var type = typeof(T);
+            if (_states.TryGetValue(type, out var state))
+            {
+                return (T)state;
+            }
+            return default;
         }
     }
 }

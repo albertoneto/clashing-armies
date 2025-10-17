@@ -6,15 +6,22 @@ namespace ClashingArmies.Units
     {
         private readonly Unit _unit;
 
-        public UnitBuilder(PoolingSystem poolingSystem, UnitsManager unitsManager, UnitData unitData, Vector3 spawnPosition)
+        public UnitBuilder(PoolingSystem poolingSystem, Transform parent, UnitData unitData, Vector3 spawnPosition)
         {
-            GameObject unitObject = poolingSystem.SpawnFromPool(PoolingSystem.PoolType.Unit, spawnPosition, unitsManager.gameObject.transform );
+            GameObject unitObject = poolingSystem.SpawnFromPool(
+                PoolingSystem.PoolType.Unit, 
+                spawnPosition, 
+                parent,
+                unitData.name);
             
             if (unitObject == null)
             {
                 Debug.LogError($"[UnitBuilder] Unable to get unit from pool.");
                 return;
             }
+
+            int layerIndex = Mathf.RoundToInt(Mathf.Log(unitData.layer.value, 2));
+            unitObject.layer = layerIndex;
             
             _unit = new Unit
             {
@@ -39,14 +46,22 @@ namespace ClashingArmies.Units
         public UnitBuilder SetUnitController()
         {
             var stateMachine = _unit.UnitObject.AddComponent<StateMachine>();
-            var stateController = _unit.UnitObject.AddComponent<UnitController>();
-            stateController.Initialize(_unit, stateMachine);
+            var controller = _unit.UnitObject.AddComponent<UnitController>();
+            controller.Initialize(_unit, stateMachine);
+            _unit.controller = controller;
             return this;
         }
 
-        public UnitBuilder SetHealth(int health)
+        public UnitBuilder SetCombatSystem()
         {
-            //_unit.Health = health;
+            var combatSystem = _unit.UnitObject.AddComponent<CombatSystem>();
+            combatSystem.Initialize(_unit);
+            return this;
+        }
+
+        public UnitBuilder SetHealth()
+        {
+            
             return this;
         }
 

@@ -1,20 +1,31 @@
 using ClashingArmies.Units;
+using UnityEngine;
 
 namespace ClashingArmies
 {
     public class CombatState : IState
     {
-        private readonly string _stateName;
-
-        public CombatState(string name, Unit unit)
+        public CombatState()
         {
-            _stateName = name;
+            
         }
 
-        public void OnEnter() { }
+        public void OnEnter()
+        {
+        /*
+            var targetHealth = other.gameObject.GetComponent<HealthSystem>();
+            if (targetHealth != null && !targetHealth.IsDead)
+            {
+                targetHealth.TakeDamage(_unit.data.Damage);
+            }
+            */
+        }
         public void OnExit() { }
-        public void OnUpdate() { }
+
+        public void OnUpdate()
+        {
+            Debug.Log("CombatState.OnUpdate()");
+        }
         public void OnFixedUpdate() { }
-        public string GetStateName() => _stateName;
     }
 }

@@ -6,6 +6,5 @@ namespace ClashingArmies
         void OnExit();
         void OnUpdate();
         void OnFixedUpdate();
-        string GetStateName();
     }
 }

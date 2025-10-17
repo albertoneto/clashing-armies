@@ -4,23 +4,38 @@ namespace ClashingArmies.Units
 {
     public class UnitController : MonoBehaviour
     {
-        private Unit _unit;
+        public Unit Unit;
         private StateMachine _stateMachine;
 
         public void Initialize(Unit unit, StateMachine stateMachine)
         {
-            _unit = unit;
+            Unit = unit;
             _stateMachine = stateMachine;
             SetupStateMachine();
         }
 
         private void SetupStateMachine()
         {
-            _stateMachine.AddState(new PatrolState("Patrol", _unit));
-            _stateMachine.AddState(new RandomMoveState("RandomMove", _unit));
-            _stateMachine.AddState(new CombatState("Combat", _unit));
+            _stateMachine.AddState(new PatrolState(Unit));
+            _stateMachine.AddState(new RandomMoveState(Unit));
+            _stateMachine.AddState(new CombatState());
 
-            _stateMachine.SetState("RandomMove");
+            switch (Unit.data.InitialState)
+            {
+                default:
+                case UnitData.InitialStateType.Randomly:
+                    _stateMachine.SetState<RandomMoveState>();
+                    break;
+                case UnitData.InitialStateType.Patrol:
+                    _stateMachine.SetState<PatrolState>();
+                    break;
+            }
+        }
+
+        public void StartCombat()
+        {
+            Debug.Log(Unit.UnitObject.name);
+            _stateMachine.SetState<CombatState>();
         }
     }
 }

@@ -3,39 +3,28 @@ using UnityEngine;
 
 namespace ClashingArmies
 {
-    public class RandomMoveState : IState
+    public class RandomMoveState : MoveState
     {
-        private readonly string _stateName;
-        private readonly Transform _unitTransform;
-        
-        private Unit _unit;
         private Vector3 _targetPosition;
-        private float _timer;
 
-        public RandomMoveState(string name, Unit unit)
+        public RandomMoveState(Unit unit) : base(unit)
         {
-            _stateName = name;
-            _unit = unit;
-            _unitTransform = _unit.UnitObject.transform;
+            SetNewTarget();
+        }
+
+        public override void OnEnter()
+        {
+            base.OnEnter();
             
             SetNewTarget();
         }
 
-        public void OnEnter()
+        public override void OnUpdate()
         {
-            _timer = 0f;
-            SetNewTarget();
-        }
-
-        public void OnExit()
-        {
-        }
-
-        public void OnUpdate()
-        {
+            base.OnUpdate();
+            
             if (_unitTransform == null) return;
-
-            _timer += Time.deltaTime;
+            
             if (_timer >= _unit.data.ChangeTargetTime)
             {
                 SetNewTarget();
@@ -46,15 +35,13 @@ namespace ClashingArmies
             _unitTransform.position += direction * _unit.data.Speed * Time.deltaTime;
         }
 
-        public void OnFixedUpdate()
-        {
-        }
-
-        public string GetStateName() => _stateName;
-
         private void SetNewTarget()
         {
-            Vector3 randomOffset = new Vector3(Random.Range(-5f, 5f), 0f, Random.Range(-5f, 5f));
+            var offset = _unit.data.RandomOffset;
+            Vector3 randomOffset = new Vector3(
+                Random.Range(-offset.x, offset.x),
+                Random.Range(-offset.y, offset.y),
+                Random.Range(-offset.z, offset.z));
             _targetPosition = _unitTransform.position + randomOffset;
         }
     }

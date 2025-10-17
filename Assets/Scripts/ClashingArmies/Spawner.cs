@@ -101,12 +101,13 @@ namespace ClashingArmies
         {
             Vector3 spawnPosition = spawnPoint != null ? spawnPoint.position : transform.position;
             
-            Unit unit = new UnitBuilder(_poolingSystem, _unitsManager, unitData, spawnPosition)
+            Unit unit = new UnitBuilder(_poolingSystem, _unitsManager.gameObject.transform, unitData, spawnPosition)
                 .SetId(units.Count.ToString())
                 .SetUnitMaterial()
                 .SetUnitController()
+                .SetCombatSystem()
+                .SetHealth()
                 .Build();
-            
 
             _unitsManager.AddUnit(unit);
         }

@@ -1,18 +1,32 @@
+using ClashingArmies.Units;
+using UnityEngine;
+
 namespace ClashingArmies
 {
     public abstract class MoveState : IState
     {
-        private readonly string _stateName;
+        protected readonly Unit _unit;
+        protected readonly Transform _unitTransform;
+        protected float _timer;
 
-        protected MoveState(string name)
+        protected MoveState(Unit unit)
         {
-            _stateName = name;
+            _unit = unit;
+            _unitTransform = _unit.UnitObject.transform;
         }
 
-        public virtual void OnEnter() { }
+        public virtual void OnEnter() 
+        {
+            _timer = 0f;
+            
+        }
         public virtual void OnExit() { }
-        public virtual void OnUpdate() { }
+        public virtual void OnUpdate() 
+        {
+            if (_unitTransform == null) return;
+
+            _timer += Time.deltaTime;
+        }
         public virtual void OnFixedUpdate() { }
-        public string GetStateName() => _stateName;
     }
 }

@@ -13,6 +13,14 @@ MonoBehaviour:
   m_Name: Green Unit
   m_EditorClassIdentifier: 
   UnitType: 1
+  InitialState: 1
   Material: {fileID: 2100000, guid: 4c4cdbc6f50da7d478a1981375726e7a, type: 2}
-  Speed: 2
-  ChangeTargetTime: 5
+  Speed: 1
+  Damage: 2
+  Health: 10
+  ChangeTargetTime: 20
+  RandomOffset: {x: 10, y: 0, z: 10}
+  Waypoints: []
+  layer:
+    serializedVersion: 2
+    m_Bits: 128
