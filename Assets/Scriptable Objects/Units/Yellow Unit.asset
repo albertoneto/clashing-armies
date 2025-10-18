@@ -16,7 +16,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   unitType: 3
-  material: {fileID: 2100000, guid: 06544a1748a97ae4285eb451451a9388, type: 2}
+  material: {fileID: 2100000, guid: 57570f642a3945b49a8e1b36bcde1525, type: 2}
   initialState: 0
   speed: 10
   changeTargetTime: 5

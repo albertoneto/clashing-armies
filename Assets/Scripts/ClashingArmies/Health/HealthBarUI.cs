@@ -28,6 +28,7 @@ namespace ClashingArmies.Health
     
         private void OnDisable()
         {
+            if(_healthSystem == null) return;
             _healthSystem.OnHealthChanged -= UpdateDisplay;
         }
     

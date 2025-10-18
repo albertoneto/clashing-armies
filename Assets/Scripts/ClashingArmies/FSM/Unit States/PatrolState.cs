@@ -12,7 +12,14 @@ namespace ClashingArmies
 
         public PatrolState(Unit unit) : base(unit) 
         {
-            _waypoints = unit.data.waypoints;
+            Vector3[] localWaypoints = unit.data.waypoints;
+            _waypoints = new Vector3[localWaypoints.Length];
+            
+            for (int i = 0; i < localWaypoints.Length; i++)
+            {
+                _waypoints[i] = unit.UnitObject.transform.position + localWaypoints[i];
+            }
+            
             _currentWaypointIndex = 0;
         }
 
