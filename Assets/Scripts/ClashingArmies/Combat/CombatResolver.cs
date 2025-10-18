@@ -18,11 +18,11 @@ namespace ClashingArmies.Combat
             Unit stronger = unit1.data.unitType == strongerType ? unit1 : unit2;
             Unit weaker = stronger == unit1 ? unit2 : unit1;
             
-            bool randomWin = Random.value < _hierarchy.randomWinChance / 100;
+            bool randomWin = Random.value < _hierarchy.randomWinChance;
             Unit winner = randomWin ? weaker : stronger;
             Unit loser = randomWin ? stronger : weaker;
             
-            float damageToWinner = winner.health.MaxHealth * _hierarchy.winnerDamagePercent;
+            float damageToWinner = winner.health.MaxHealth * _hierarchy.winnerDamagePercent / 100;
             return new CombatResult(winner, loser, damageToWinner);
         }
     }

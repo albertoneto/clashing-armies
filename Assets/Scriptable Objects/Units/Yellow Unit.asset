@@ -18,7 +18,7 @@ MonoBehaviour:
   unitType: 3
   material: {fileID: 2100000, guid: 06544a1748a97ae4285eb451451a9388, type: 2}
   initialState: 0
-  speed: 6
+  speed: 10
   changeTargetTime: 5
   randomOffset: {x: 10, y: 0, z: 10}
   waypoints:

@@ -50,6 +50,7 @@ namespace ClashingArmies.Units
         {
             _stateMachine.enabled = false;
             combatSystem.enabled = false;
+            _unit.health.ResetHealth();
             _unit.health.OnDeath -= HandleDeath;
             
             _poolingSystem.ReturnToPool(PoolingSystem.PoolType.Unit, _unit.UnitObject);

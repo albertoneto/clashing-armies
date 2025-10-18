@@ -30,9 +30,22 @@ namespace ClashingArmies
                 SetNewTarget();
                 _timer = 0f;
             }
-
-            Vector3 direction = (_targetPosition - _unitTransform.position).normalized;
-            _unitTransform.position += direction * _unit.data.speed * Time.deltaTime;
+            
+            Vector3 toTarget = _targetPosition - _unitTransform.position;
+            float distance = toTarget.magnitude;
+            if (distance < 0.1f) return;
+            
+            float moveDistance = _unit.data.speed * Time.deltaTime;
+            if (moveDistance > distance)
+            {
+                _unitTransform.position = _targetPosition;
+            }
+            else
+            {
+                Vector3 direction = toTarget / distance;
+                _unitTransform.position += direction * moveDistance;
+            }
+            
         }
 
         private void SetNewTarget()

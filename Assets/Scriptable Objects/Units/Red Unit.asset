@@ -19,7 +19,7 @@ MonoBehaviour:
   material: {fileID: 2100000, guid: dfd2108490e9ee642ada557a4e647e37, type: 2}
   initialState: 1
   speed: 10
-  changeTargetTime: 5
+  changeTargetTime: 4
   randomOffset: {x: 10, y: 0, z: 10}
   waypoints: []
   detectionRadius: 2

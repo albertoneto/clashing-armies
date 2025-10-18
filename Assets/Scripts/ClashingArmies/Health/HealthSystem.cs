@@ -5,22 +5,18 @@ namespace ClashingArmies.Health
 {
     public class HealthSystem
     {
-    
-        public float CurrentHealth => _currentHealth;
-        public float MaxHealth => _maxHealth;
-        public bool IsDead => _currentHealth <= 0;
-    
         public event Action<float, float> OnHealthChanged;
-        public event Action<float> OnDamageTaken;
         public event Action OnDeath;
         
-        private float _currentHealth;
-        private float _maxHealth;
-    
+        public float CurrentHealth { get; private set; }
+        public float MaxHealth { get; }
+
+        private bool IsDead => CurrentHealth <= 0;
+
         public HealthSystem(float initialMaxHealth)
         {
-            _maxHealth = initialMaxHealth;
-            _currentHealth = _maxHealth;
+            MaxHealth = initialMaxHealth;
+            CurrentHealth = MaxHealth;
         }
     
         public void TakeDamage(float amount)
@@ -28,10 +24,8 @@ namespace ClashingArmies.Health
             if (IsDead) return;
         
             amount = Mathf.Max(0, amount);
-            _currentHealth = Mathf.Max(0, _currentHealth - amount);
-        
-            OnDamageTaken?.Invoke(amount);
-            OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+            CurrentHealth = Mathf.Max(0, CurrentHealth - amount);
+            OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
         
             if (IsDead)
             {
@@ -41,8 +35,8 @@ namespace ClashingArmies.Health
     
         public void ResetHealth()
         {
-            _currentHealth = _maxHealth;
-            OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+            CurrentHealth = MaxHealth;
+            OnHealthChanged?.Invoke(CurrentHealth, MaxHealth);
         }
     }
 }

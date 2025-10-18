@@ -22,4 +22,4 @@ MonoBehaviour:
   - unitType: 3
     StrengthLevel: 5
   randomWinChance: 0.2
-  winnerDamagePercent: 0.1
+  winnerDamagePercent: 10
