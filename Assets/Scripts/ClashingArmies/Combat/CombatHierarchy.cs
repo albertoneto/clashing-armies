@@ -17,8 +17,7 @@ namespace ClashingArmies.Combat
             public int StrengthLevel = 1;
         }
         
-        [Header("Unit Strength Configuration")]
-        [Tooltip("Configure the strength of each unit type")]
+        [Header("Unit Strength")]
         public List<UnitStrength> unitStrengths = new();
         
         [Header("Combat Rules")]
@@ -26,8 +25,8 @@ namespace ClashingArmies.Combat
         [Tooltip("Chance for the weaker unit to win (0 = never, 1 = always)")]
         public float randomWinChance = 0.2f;
 
-        [Range(0f, 1f)] [Tooltip("Percentage of health the winner loses (0 = nothing, 1 = everything)")]
-        public float winnerDamagePercent = 0.3f;
+        [Range(0f, 100f)] [Tooltip("Percentage of health the winner loses")]
+        public float winnerDamagePercent = 0.1f;
         
         public int GetStrength(UnitType unitType)
         {

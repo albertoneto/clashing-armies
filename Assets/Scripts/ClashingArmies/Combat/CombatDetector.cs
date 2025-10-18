@@ -9,8 +9,7 @@ namespace ClashingArmies.Combat
         private readonly int _ownerLayer;
         private readonly float _detectionRadius;
         private readonly UnitsManager _unitsManager;
-        
-        private readonly Collider[] _colliderBuffer = new Collider[32];
+        private readonly Collider[] _colliderBuffer = new Collider[1];
         
         public CombatDetector(Transform transform, int ownerLayer, float detectionRadius, UnitsManager unitsManager)
         {
@@ -28,19 +27,13 @@ namespace ClashingArmies.Combat
                 _colliderBuffer
             );
             
-            Unit nearestUnit = null;
+            if (hitCount == 0) return null;
+            GameObject hitObject = _colliderBuffer[0].gameObject;
             
-            for (int i = 0; i < hitCount; i++)
-            {
-                GameObject hitObject = _colliderBuffer[i].gameObject;
-                
-                if (hitObject == _transform.gameObject) continue;
-                if (Physics.GetIgnoreLayerCollision(_ownerLayer, hitObject.layer)) continue;
+            if (hitObject == _transform.gameObject) return null;
+            if (Physics.GetIgnoreLayerCollision(_ownerLayer, hitObject.layer)) return null;
 
-                nearestUnit = _unitsManager.GetUnit(hitObject);
-            }
-            
-            return nearestUnit;
+            return _unitsManager.GetUnit(hitObject);
         }
     }
 }

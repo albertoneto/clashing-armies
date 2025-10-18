@@ -16,10 +16,10 @@ MonoBehaviour:
   - unitType: 0
     StrengthLevel: 10
   - unitType: 2
-    StrengthLevel: 2
+    StrengthLevel: 1
   - unitType: 1
-    StrengthLevel: 0
+    StrengthLevel: 1
   - unitType: 3
     StrengthLevel: 5
   randomWinChance: 0.2
-  winnerDamagePercent: 0.3
+  winnerDamagePercent: 0.1
