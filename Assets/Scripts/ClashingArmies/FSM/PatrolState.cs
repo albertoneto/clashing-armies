@@ -12,7 +12,7 @@ namespace ClashingArmies
 
         public PatrolState(Unit unit) : base(unit) 
         {
-            _waypoints = unit.data.Waypoints;
+            _waypoints = unit.data.waypoints;
             _currentWaypointIndex = 0;
         }
 
@@ -47,7 +47,7 @@ namespace ClashingArmies
         private void MoveTowards(Vector3 target)
         {
             Vector3 direction = (target - _unitTransform.position).normalized;
-            _unitTransform.position += direction * _unit.data.Speed * Time.deltaTime;
+            _unitTransform.position += direction * _unit.data.speed * Time.deltaTime;
 
             if (direction == Vector3.zero) return;
             

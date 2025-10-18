@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ebcf2b167884ee580110a2a9088e2cf, type: 3}
   m_Name: Green Unit
   m_EditorClassIdentifier: 
-  UnitType: 1
-  InitialState: 1
-  Material: {fileID: 2100000, guid: 4c4cdbc6f50da7d478a1981375726e7a, type: 2}
-  Speed: 1
-  Damage: 2
-  Health: 10
-  ChangeTargetTime: 20
-  RandomOffset: {x: 10, y: 0, z: 10}
-  Waypoints: []
   layer:
     serializedVersion: 2
     m_Bits: 128
+  unitType: 1
+  material: {fileID: 2100000, guid: 4c4cdbc6f50da7d478a1981375726e7a, type: 2}
+  initialState: 1
+  speed: 10
+  changeTargetTime: 3
+  randomOffset: {x: 10, y: 0, z: 10}
+  waypoints: []
+  detectionRadius: 2
+  maxHealth: 100

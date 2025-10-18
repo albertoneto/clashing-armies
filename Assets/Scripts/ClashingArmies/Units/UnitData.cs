@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ClashingArmies.Units
 {
-    [CreateAssetMenu(menuName = "Create Unit", fileName = "Unit", order = 0)]
+    [CreateAssetMenu(menuName = "Clashing Armies/Create Unit", fileName = "Unit", order = 0)]
     public class UnitData : ScriptableObject
     {
         public enum InitialStateType
@@ -10,15 +10,23 @@ namespace ClashingArmies.Units
             Patrol,
             Randomly
         }
-        public UnitType UnitType;
-        public InitialStateType InitialState = InitialStateType.Randomly;
-        public Material Material;
-        public float Speed = 2f;
-        public float Damage = 2f;
-        public float Health = 10f;
-        public float ChangeTargetTime = 5f;
-        public Vector3 RandomOffset = new Vector3(10f, 10f, 10f);
-        public Vector3[] Waypoints;
+        
+        [Header("Main")]
         public LayerMask layer;
+        public UnitType unitType;
+        public Material material;
+        
+        [Header("Movement")]
+        public InitialStateType initialState = InitialStateType.Randomly;
+        public float speed = 2f;
+        public float changeTargetTime = 5f;
+        public Vector3 randomOffset = new Vector3(10f, 10f, 10f);
+        public Vector3[] waypoints;
+        
+        [Header("Combat")]        
+        public float detectionRadius = 2f;
+        
+        [Header("Health")]
+        public float maxHealth = 100f;
     }
 }

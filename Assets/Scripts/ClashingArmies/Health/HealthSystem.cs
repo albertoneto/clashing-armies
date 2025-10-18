@@ -1,96 +1,81 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace ClashingArmies.Health
 {
-public class HealthSystem : MonoBehaviour
-{
-    [Header("Configuration")]
-    [SerializeField] private float maxHealth = 100f;
-    [SerializeField] private bool destroyOnDeath = false;
-    [SerializeField] private float destroyDelay = 2f;
-    
-    [Header("Visual Feedback")]
-    [SerializeField] private bool showHealthBar = true;
-    [SerializeField] private GameObject healthBarPrefab;
-    
-    private HealthLogic  healthLogic;
-    private HealthBarUI healthBarUI;
-    
-    public IHealthSystem Health => healthLogic;
-    public bool IsDead => healthLogic.IsDead;
-    
-    public UnityEvent<float> OnDamageEvent;
-    public UnityEvent<float> OnHealEvent;
-    public UnityEvent OnDeathEvent;
-    
-    private void Awake()
+    public class HealthSystem
     {
-        healthLogic = new HealthLogic(maxHealth);
+    
+        public float CurrentHealth => _currentHealth;
+        public float MaxHealth => _maxHealth;
+        public bool IsDead => _currentHealth <= 0;
+    
+        public event Action<float, float> OnHealthChanged;
+        public event Action<float> OnDamageTaken;
+        public event Action<float> OnHealed;
+        public event Action OnDeath;
         
-        healthLogic.OnDamageTaken += HandleDamageTaken;
-        healthLogic.OnHealed += HandleHealed;
-        healthLogic.OnDeath += HandleDeath;
-        healthLogic.OnHealthChanged += HandleHealthChanged;
-        
-        if (showHealthBar && healthBarPrefab != null)
+        private float _currentHealth;
+        private float _maxHealth;
+    
+        public HealthSystem(float initialMaxHealth)
         {
-            GameObject bar = Instantiate(healthBarPrefab, transform);
-            healthBarUI = bar.GetComponent<HealthBarUI>();
-            healthBarUI?.Initialize(healthLogic);
+            _maxHealth = initialMaxHealth;
+            _currentHealth = _maxHealth;
+        }
+    
+        public void TakeDamage(float amount)
+        {
+            if (IsDead) return;
+        
+            amount = Mathf.Max(0, amount);
+            _currentHealth = Mathf.Max(0, _currentHealth - amount);
+        
+            OnDamageTaken?.Invoke(amount);
+            OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+        
+            if (IsDead)
+            {
+                OnDeath?.Invoke();
+            }
+        }
+    
+        public void Heal(float amount)
+        {
+            if (IsDead) return;
+        
+            amount = Mathf.Max(0, amount);
+            float oldHealth = _currentHealth;
+            _currentHealth = Mathf.Min(_maxHealth, _currentHealth + amount);
+        
+            float actualHealed = _currentHealth - oldHealth;
+            if (actualHealed > 0)
+            {
+                OnHealed?.Invoke(actualHealed);
+                OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+            }
+        }
+    
+        public void SetMaxHealth(float newMax)
+        {
+            newMax = Mathf.Max(1, newMax);
+            float healthPercentage = _currentHealth / _maxHealth;
+        
+            _maxHealth = newMax;
+            _currentHealth = _maxHealth * healthPercentage;
+        
+            OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+        }
+    
+        public void ResetHealth()
+        {
+            _currentHealth = _maxHealth;
+            OnHealthChanged?.Invoke(_currentHealth, _maxHealth);
+        }
+    
+        public float GetHealthPercentage()
+        {
+            return _maxHealth > 0 ? _currentHealth / _maxHealth : 0;
         }
     }
-    
-    private void HandleDamageTaken(float damage)
-    {
-        OnDamageEvent?.Invoke(damage);
-    }
-    
-    private void HandleHealed(float amount)
-    {
-        OnHealEvent?.Invoke(amount);
-    }
-    
-    private void HandleDeath()
-    {
-        OnDeathEvent?.Invoke();
-        
-        if (destroyOnDeath)
-        {
-            Destroy(gameObject, destroyDelay);
-        }
-    }
-    
-    private void HandleHealthChanged(float current, float max)
-    {
-        
-    }
-    
-    private void OnDestroy()
-    {
-        if (healthLogic != null)
-        {
-            healthLogic.OnDamageTaken -= HandleDamageTaken;
-            healthLogic.OnHealed -= HandleHealed;
-            healthLogic.OnDeath -= HandleDeath;
-            healthLogic.OnHealthChanged -= HandleHealthChanged;
-        }
-    }
-    
-    public void TakeDamage(float amount)
-    {
-        healthLogic.TakeDamage(amount);
-    }
-    
-    public void Heal(float amount)
-    {
-        healthLogic.Heal(amount);
-    }
-    /*
-    public float GetHealthPercentage()
-    {
-        return healthLogic.GetHealthPercentage();
-    }
-    */
-}
 }

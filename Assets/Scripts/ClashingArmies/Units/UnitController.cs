@@ -1,41 +1,58 @@
+using System;
+using ClashingArmies.Combat;
+using ClashingArmies.Health;
 using UnityEngine;
 
 namespace ClashingArmies.Units
 {
+    [RequireComponent(typeof(CombatSystem))]
     public class UnitController : MonoBehaviour
     {
-        public Unit Unit;
-        private StateMachine _stateMachine;
+        public CombatSystem combatSystem;
 
-        public void Initialize(Unit unit, StateMachine stateMachine)
+        private Unit _unit;
+        private StateMachine _stateMachine;
+        private PoolingSystem _poolingSystem;
+        
+        public Unit Unit => _unit;
+        
+        public void Initialize(Unit unit, StateMachine stateMachine, PoolingSystem poolingSystem)
         {
-            Unit = unit;
+            _unit = unit;
             _stateMachine = stateMachine;
-            SetupStateMachine();
+            _poolingSystem = poolingSystem;
+            
+            InitializeStates();
+            SetInitialState();
         }
 
-        private void SetupStateMachine()
+        private void InitializeStates()
         {
-            _stateMachine.AddState(new PatrolState(Unit));
-            _stateMachine.AddState(new RandomMoveState(Unit));
+            _stateMachine.AddState(new PatrolState(_unit));
+            _stateMachine.AddState(new RandomMoveState(_unit));
             _stateMachine.AddState(new CombatState());
-
-            switch (Unit.data.InitialState)
+        }
+        
+        private void SetInitialState()
+        {
+            switch (_unit.data.initialState)
             {
-                default:
-                case UnitData.InitialStateType.Randomly:
-                    _stateMachine.SetState<RandomMoveState>();
-                    break;
                 case UnitData.InitialStateType.Patrol:
                     _stateMachine.SetState<PatrolState>();
                     break;
+                case UnitData.InitialStateType.Randomly:
+                    _stateMachine.SetState<RandomMoveState>();
+                    break;
             }
         }
-
-        public void StartCombat()
+        
+        public void HandleDeath()
         {
-            Debug.Log(Unit.UnitObject.name);
-            _stateMachine.SetState<CombatState>();
+            _stateMachine.enabled = false;
+            combatSystem.enabled = false;
+            _unit.health.OnDeath -= HandleDeath;
+            
+            _poolingSystem.ReturnToPool(PoolingSystem.PoolType.Unit, _unit.UnitObject);
         }
     }
 }

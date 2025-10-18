@@ -8,17 +8,13 @@ namespace ClashingArmies.Health
         [SerializeField] private Image fillImage;
         [SerializeField] private Text healthText;
     
-        private IHealthSystem healthSystem;
+        private HealthSystem healthSystem;
     
-        public void Initialize(IHealthSystem health)
+        public void Initialize(HealthSystem health)
         {
             healthSystem = health;
-        
-            if (health is HealthLogic logic)
-            {
-                logic.OnHealthChanged += UpdateDisplay;
-                UpdateDisplay(health.CurrentHealth, health.MaxHealth);
-            }
+            healthSystem.OnHealthChanged += UpdateDisplay;
+            UpdateDisplay(health.CurrentHealth, health.MaxHealth);
         }
     
         private void UpdateDisplay(float current, float max)
@@ -36,10 +32,7 @@ namespace ClashingArmies.Health
     
         private void OnDestroy()
         {
-            if (healthSystem is HealthLogic logic)
-            {
-                logic.OnHealthChanged -= UpdateDisplay;
-            }
+            healthSystem.OnHealthChanged -= UpdateDisplay;
         }
     }
 }

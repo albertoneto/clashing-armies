@@ -164,7 +164,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   units:
-  - {fileID: 11400000, guid: 98cdbc8bc5456b240a4f6ee415e0f930, type: 2}
   - {fileID: 11400000, guid: 575938ea6ca4df84ea301af5a434c33b, type: 2}
   timeBetweenSpawns: 5
   spawnPoint: {fileID: 0}
@@ -216,7 +215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   units:
   - {fileID: 11400000, guid: 98cdbc8bc5456b240a4f6ee415e0f930, type: 2}
-  timeBetweenSpawns: 2
+  timeBetweenSpawns: 1
   spawnPoint: {fileID: 0}
   spawnOnStart: 1
   maxUnitsToSpawn: -1
@@ -514,6 +513,7 @@ MonoBehaviour:
   - {fileID: 1917089489}
   - {fileID: 915284542}
   unitsManager: {fileID: 1620011721}
+  combatHierarchy: {fileID: 11400000, guid: db0b7f53ab1c69044a64584a9f7b78c7, type: 2}
 --- !u!4 &483634222
 Transform:
   m_ObjectHideFlags: 0
@@ -671,10 +671,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   units:
-  - {fileID: 11400000, guid: 98cdbc8bc5456b240a4f6ee415e0f930, type: 2}
   - {fileID: 11400000, guid: 68d1931e0d310e046bff34236ce89a80, type: 2}
-  - {fileID: 11400000, guid: 575938ea6ca4df84ea301af5a434c33b, type: 2}
-  - {fileID: 11400000, guid: 32e67b27a9747084d91e1a7855bd915d, type: 2}
   timeBetweenSpawns: 15
   spawnPoint: {fileID: 0}
   spawnOnStart: 1

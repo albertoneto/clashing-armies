@@ -25,19 +25,19 @@ namespace ClashingArmies
             
             if (_unitTransform == null) return;
             
-            if (_timer >= _unit.data.ChangeTargetTime)
+            if (_timer >= _unit.data.changeTargetTime)
             {
                 SetNewTarget();
                 _timer = 0f;
             }
 
             Vector3 direction = (_targetPosition - _unitTransform.position).normalized;
-            _unitTransform.position += direction * _unit.data.Speed * Time.deltaTime;
+            _unitTransform.position += direction * _unit.data.speed * Time.deltaTime;
         }
 
         private void SetNewTarget()
         {
-            var offset = _unit.data.RandomOffset;
+            var offset = _unit.data.randomOffset;
             Vector3 randomOffset = new Vector3(
                 Random.Range(-offset.x, offset.x),
                 Random.Range(-offset.y, offset.y),

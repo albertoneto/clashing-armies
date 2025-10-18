@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using ClashingArmies.Combat;
 using ClashingArmies.Units;
 using UnityEngine;
 
@@ -20,14 +21,16 @@ namespace ClashingArmies
         
         private PoolingSystem _poolingSystem;
         private UnitsManager _unitsManager;
+        private CombatHierarchy _combatHierarchy;
         private Coroutine _spawnCoroutine;
         private int _spawnedUnitsCount;
         private bool _isSpawning;
 
-        public void Initialize(PoolingSystem poolingSystem, UnitsManager unitsManager)
+        public void Initialize(PoolingSystem poolingSystem, UnitsManager unitsManager, CombatHierarchy combatHierarchy = null)
         {
             _poolingSystem = poolingSystem;
             _unitsManager = unitsManager;
+            _combatHierarchy = combatHierarchy;
             
             if (spawnOnStart)
             {
@@ -105,7 +108,7 @@ namespace ClashingArmies
                 .SetId(units.Count.ToString())
                 .SetUnitMaterial()
                 .SetUnitController()
-                .SetCombatSystem()
+                .SetCombatTrigger(_combatHierarchy, _unitsManager)
                 .SetHealth()
                 .Build();
 

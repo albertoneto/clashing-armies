@@ -1,3 +1,5 @@
+using ClashingArmies.Combat;
+using ClashingArmies.Health;
 using UnityEngine;
 
 namespace ClashingArmies.Units
@@ -5,6 +7,8 @@ namespace ClashingArmies.Units
     public class UnitBuilder
     {
         private readonly Unit _unit;
+        
+        private PoolingSystem _poolingSystem;
 
         public UnitBuilder(PoolingSystem poolingSystem, Transform parent, UnitData unitData, Vector3 spawnPosition)
         {
@@ -20,6 +24,7 @@ namespace ClashingArmies.Units
                 return;
             }
 
+            _poolingSystem = poolingSystem;
             int layerIndex = Mathf.RoundToInt(Mathf.Log(unitData.layer.value, 2));
             unitObject.layer = layerIndex;
             
@@ -39,7 +44,7 @@ namespace ClashingArmies.Units
         public UnitBuilder SetUnitMaterial()
         {
             var renderer = _unit.UnitObject.gameObject.GetComponent<MeshRenderer>();
-            renderer.material = _unit.data.Material;
+            renderer.material = _unit.data.material;
             return this;
         }
 
@@ -47,21 +52,22 @@ namespace ClashingArmies.Units
         {
             var stateMachine = _unit.UnitObject.AddComponent<StateMachine>();
             var controller = _unit.UnitObject.AddComponent<UnitController>();
-            controller.Initialize(_unit, stateMachine);
+            controller.Initialize(_unit, stateMachine, _poolingSystem);
             _unit.controller = controller;
             return this;
         }
 
-        public UnitBuilder SetCombatSystem()
+        public UnitBuilder SetCombatTrigger(CombatHierarchy combatHierarchy, UnitsManager unitsManager)
         {
-            var combatSystem = _unit.UnitObject.AddComponent<CombatSystem>();
-            combatSystem.Initialize(_unit);
+            _unit.controller.combatSystem = _unit.UnitObject.AddComponent<CombatSystem>();
+            _unit.controller.combatSystem.Initialize(_unit.controller, combatHierarchy, unitsManager);
             return this;
         }
 
         public UnitBuilder SetHealth()
         {
-            
+            _unit.health = new HealthSystem(_unit.data.maxHealth);
+            _unit.health.OnDeath += _unit.controller.HandleDeath;
             return this;
         }
 

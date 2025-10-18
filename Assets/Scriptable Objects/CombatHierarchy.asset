@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 981c65104e754a92a8902a0e51623e90, type: 3}
+  m_Name: CombatHierarchy
+  m_EditorClassIdentifier: 
+  unitStrengths:
+  - unitType: 0
+    StrengthLevel: 10
+  - unitType: 2
+    StrengthLevel: 2
+  - unitType: 1
+    StrengthLevel: 0
+  - unitType: 3
+    StrengthLevel: 5
+  randomWinChance: 0.2
+  winnerDamagePercent: 0.3

@@ -36,7 +36,7 @@ namespace ClashingArmies.Tests
 
             Assert.IsNotNull(unitsList);
             Assert.AreEqual(1, unitsList.Count);
-            Assert.AreEqual(UnitType.Red, unitsList[0].data.UnitType);
+            Assert.AreEqual(UnitType.Red, unitsList[0].data.unitType);
         }
 
         [Test]
@@ -55,16 +55,16 @@ namespace ClashingArmies.Tests
 
             Assert.IsNotNull(unitsList);
             Assert.AreEqual(3, unitsList.Count);
-            Assert.AreEqual(UnitType.Red, unitsList[0].data.UnitType);
-            Assert.AreEqual(UnitType.Blue, unitsList[1].data.UnitType);
-            Assert.AreEqual(UnitType.Green, unitsList[2].data.UnitType);
+            Assert.AreEqual(UnitType.Red, unitsList[0].data.unitType);
+            Assert.AreEqual(UnitType.Blue, unitsList[1].data.unitType);
+            Assert.AreEqual(UnitType.Green, unitsList[2].data.unitType);
         }
 
         private static Unit CreateUnit(UnitType type)
         {
             Unit redUnit = new Unit();
             redUnit.data = ScriptableObject.CreateInstance<UnitData>();
-            redUnit.data.UnitType = type;
+            redUnit.data.unitType = type;
             return redUnit;
         }
 

@@ -3,13 +3,15 @@ using UnityEngine;
 
 namespace ClashingArmies.Units
 {
-    public partial class UnitsManager : MonoBehaviour
+    public class UnitsManager : MonoBehaviour
     {
-        private readonly List<Unit> _units = new();
+        private readonly Dictionary<GameObject, Unit> _units = new();
+        private Unit _lastUnit;
 
         public void AddUnit(Unit unit)
         {
-            _units.Add(unit);
+            _units.Add(unit.UnitObject, unit);
+            _lastUnit = unit;
         }
 
         public int GetUnitCount()
@@ -19,12 +21,13 @@ namespace ClashingArmies.Units
 
         public Unit GetLastUnit()
         {
-            return _units.Count > 0 ? _units[^1] : null;
+            return _lastUnit;
         }
 
-        public List<Unit> GetAllUnits()
+        public Unit GetUnit(GameObject hitObject)
         {
-            return _units;
+            _units.TryGetValue(hitObject, out var unit);
+            return unit;
         }
     }
 }

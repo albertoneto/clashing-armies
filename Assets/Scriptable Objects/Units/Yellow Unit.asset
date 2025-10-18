@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ebcf2b167884ee580110a2a9088e2cf, type: 3}
   m_Name: Yellow Unit
   m_EditorClassIdentifier: 
-  UnitType: 3
-  InitialState: 0
-  Material: {fileID: 2100000, guid: 06544a1748a97ae4285eb451451a9388, type: 2}
-  Speed: 5
-  Damage: 2
-  Health: 10
-  ChangeTargetTime: 0
-  RandomOffset: {x: 10, y: 0, z: 10}
-  Waypoints:
-  - {x: 0, y: 0, z: 0}
-  - {x: 10, y: 0, z: 0}
   layer:
     serializedVersion: 2
     m_Bits: 512
+  unitType: 3
+  material: {fileID: 2100000, guid: 06544a1748a97ae4285eb451451a9388, type: 2}
+  initialState: 0
+  speed: 6
+  changeTargetTime: 5
+  randomOffset: {x: 10, y: 0, z: 10}
+  waypoints:
+  - {x: 10, y: 0, z: 0}
+  - {x: -10, y: 0, z: 0}
+  detectionRadius: 2
+  maxHealth: 100

@@ -58,7 +58,7 @@ namespace ClashingArmies.Tests
         {
             Unit redUnit = new Unit();
             redUnit.data = ScriptableObject.CreateInstance<UnitData>();
-            redUnit.data.UnitType = type;
+            redUnit.data.unitType = type;
             return redUnit;
         }
 
@@ -106,7 +106,7 @@ namespace ClashingArmies.Tests
             
             Unit lastUnit = unitsManager.GetLastUnit();
             Assert.IsNotNull(lastUnit, "Last unit should not be null");
-            Assert.AreEqual(UnitType.Red, lastUnit.data.UnitType, "Incorrect unit type");
+            Assert.AreEqual(UnitType.Red, lastUnit.data.unitType, "Incorrect unit type");
         }
 
         [UnityTest]

@@ -1,3 +1,4 @@
+using ClashingArmies.Health;
 using UnityEngine;
 
 namespace ClashingArmies.Units
@@ -8,5 +9,6 @@ namespace ClashingArmies.Units
         public GameObject UnitObject;
         public UnitData data;
         public UnitController controller;
+        public HealthSystem health;
     }
 }
