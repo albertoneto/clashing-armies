@@ -6,7 +6,7 @@ using UnityEngine;
 namespace ClashingArmies.Units
 {
     [RequireComponent(typeof(CombatSystem))]
-    public class UnitController : MonoBehaviour
+    public class UnitController
     {
         public CombatSystem combatSystem;
 
@@ -16,10 +16,10 @@ namespace ClashingArmies.Units
         
         public Unit Unit => _unit;
         
-        public void Initialize(Unit unit, StateMachine stateMachine, PoolingSystem poolingSystem)
+        public UnitController(Unit unit, PoolingSystem poolingSystem)
         {
             _unit = unit;
-            _stateMachine = stateMachine;
+            _stateMachine = _unit.UnitObject.AddComponent<StateMachine>();
             _poolingSystem = poolingSystem;
             
             InitializeStates();
@@ -54,6 +54,7 @@ namespace ClashingArmies.Units
             _unit.health.OnDeath -= HandleDeath;
             
             _poolingSystem.ReturnToPool(PoolingSystem.PoolType.Unit, _unit.UnitObject);
+            _unit.Dispose();
         }
     }
 }

@@ -7,14 +7,10 @@ namespace ClashingArmies
 {
     public class GameInitializer : MonoBehaviour
     {
-        [SerializeField]
-        private PoolingSystem poolingSystem;
-        [SerializeField]
-        private List<Spawner> spawners;
-        [SerializeField]
-        private UnitsManager unitsManager;
-        [SerializeField]
-        private CombatHierarchy combatHierarchy;
+        [SerializeField] private PoolingSystem poolingSystem;
+        [SerializeField] private List<Spawner> spawners;
+        [SerializeField] private UnitsManager unitsManager;
+        [SerializeField] private CombatHierarchy combatHierarchy;
 
         private void Start()
         {

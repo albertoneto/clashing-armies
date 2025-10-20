@@ -8,16 +8,11 @@ namespace ClashingArmies
 {
     public class Spawner : MonoBehaviour
     {
-        [SerializeField] 
-        private List<UnitData> units;
-        [SerializeField, Range(0, 100)] 
-        private float timeBetweenSpawns = 2f;
-        [SerializeField]
-        private Transform spawnPoint;
-        [SerializeField]
-        private bool spawnOnStart = true;
-        [SerializeField]
-        private int maxUnitsToSpawn = -1;
+        [SerializeField] private List<UnitData> units;
+        [SerializeField, Range(0, 100)] private float timeBetweenSpawns = 2f;
+        [SerializeField] private Transform spawnPoint;
+        [SerializeField] private bool spawnOnStart = true;
+        [SerializeField] private int maxUnitsToSpawn = -1;
         
         private PoolingSystem _poolingSystem;
         private UnitsManager _unitsManager;
@@ -106,10 +101,10 @@ namespace ClashingArmies
             
             Unit unit = new UnitBuilder(_poolingSystem, _unitsManager.gameObject.transform, unitData, spawnPosition)
                 .SetId(units.Count.ToString())
-                .SetUnitMaterial()
                 .SetUnitController()
-                .SetCombatTrigger(_combatHierarchy, _unitsManager)
+                .SetCombat(_combatHierarchy, _unitsManager)
                 .SetHealth()
+                .SetUnitView()
                 .Build();
 
             _unitsManager.AddUnit(unit);

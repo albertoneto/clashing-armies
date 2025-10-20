@@ -41,23 +41,19 @@ namespace ClashingArmies.Units
             return this;
         }
 
-        public UnitBuilder SetUnitMaterial()
-        {
-            var renderer = _unit.UnitObject.gameObject.GetComponent<MeshRenderer>();
-            renderer.material = _unit.data.material;
-            return this;
-        }
-
         public UnitBuilder SetUnitController()
         {
-            var stateMachine = _unit.UnitObject.AddComponent<StateMachine>();
-            var controller = _unit.UnitObject.AddComponent<UnitController>();
-            controller.Initialize(_unit, stateMachine, _poolingSystem);
-            _unit.controller = controller;
+            _unit.controller = new UnitController(_unit, _poolingSystem);
             return this;
         }
 
-        public UnitBuilder SetCombatTrigger(CombatHierarchy combatHierarchy, UnitsManager unitsManager)
+        public UnitBuilder SetUnitView()
+        {
+            _unit.view = new UnitView(_unit, _poolingSystem);
+            return this;
+        }
+
+        public UnitBuilder SetCombat(CombatHierarchy combatHierarchy, UnitsManager unitsManager)
         {
             _unit.controller.combatSystem = _unit.UnitObject.AddComponent<CombatSystem>();
             _unit.controller.combatSystem.Initialize(_unit.controller, combatHierarchy, unitsManager);

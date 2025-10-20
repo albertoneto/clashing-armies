@@ -13,6 +13,12 @@ namespace ClashingArmies.Units
             _units.Add(unit.UnitObject, unit);
             _lastUnit = unit;
         }
+        
+        public void RemoveUnit(Unit unit)
+        {
+            _units.Remove(unit.UnitObject);
+            unit.Dispose();
+        }
 
         public int GetUnitCount()
         {

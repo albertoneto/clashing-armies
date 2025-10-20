@@ -9,6 +9,12 @@ namespace ClashingArmies.Units
         public GameObject UnitObject;
         public UnitData data;
         public UnitController controller;
+        public UnitView view;
         public HealthSystem health;
+
+        public void Dispose()
+        {
+            health.OnDeath -= controller.HandleDeath;
+        }
     }
 }

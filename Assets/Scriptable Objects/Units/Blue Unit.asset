@@ -24,3 +24,7 @@ MonoBehaviour:
   waypoints: []
   detectionRadius: 2
   maxHealth: 100
+  deathEffect: {fileID: 11400000, guid: f429c94bfaab25c459056435da1ecfe3, type: 2}
+  spawnEffect: {fileID: 11400000, guid: 136199ba166076a4b884f1d9c58f3f19, type: 2}
+  deathSfxEffect: {fileID: 11400000, guid: bf4e44dcdd1b35244b7fa9889c3b356e, type: 2}
+  spawnSfxEffect: {fileID: 11400000, guid: c761ab7c402df564e917e609b0d5337f, type: 2}

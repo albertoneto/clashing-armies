@@ -33,7 +33,12 @@ namespace ClashingArmies
             
             Vector3 toTarget = _targetPosition - _unitTransform.position;
             float distance = toTarget.magnitude;
-            if (distance < 0.1f) return;
+            if (distance < 0.1f)
+            {
+                SetNewTarget();
+                _timer = 0f;
+                return;
+            }
             
             float moveDistance = _unit.data.speed * Time.deltaTime;
             if (moveDistance > distance)

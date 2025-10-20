@@ -5,7 +5,7 @@ namespace ClashingArmies
 {
     public class PoolingSystem : MonoBehaviour
     {
-        public enum PoolType {Unit}
+        public enum PoolType {Unit, ParticleExplosion, ParticleSpawn, ParticleVictory, AudioSource}
         [System.Serializable]
         public class Pool
         {

@@ -1,3 +1,4 @@
+using ClashingArmies.Effects;
 using UnityEngine;
 
 namespace ClashingArmies.Units
@@ -28,5 +29,11 @@ namespace ClashingArmies.Units
         
         [Header("Health")]
         public float maxHealth = 100f;
+        
+        [Header("Effect References")]
+        public VisualEffectData deathEffect;
+        public VisualEffectData spawnEffect;
+        public SoundEffectData deathSfxEffect;
+        public SoundEffectData spawnSfxEffect;
     }
 }

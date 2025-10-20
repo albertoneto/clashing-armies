@@ -1,3 +1,4 @@
+using System;
 using ClashingArmies.Units;
 using UnityEngine;
 
@@ -5,10 +6,15 @@ namespace ClashingArmies.Combat
 {
     public class CombatSystem : MonoBehaviour
     {
+        public event Action<Vector3> OnVictory;
+        
         private CombatHierarchy _combatHierarchy;
         private UnitController _controller;
         private CombatDetector _combatDetector;
         private CombatResolver _combatResolver;
+        
+        private float _combatCooldown = 1f;
+        private float _lastCombatTime = -999f;
         
         public void Initialize(UnitController controller, CombatHierarchy combatHierarchy, UnitsManager unitsManager)
         {
@@ -36,10 +42,13 @@ namespace ClashingArmies.Combat
         
         private void TryEngageCombat(Unit enemy)
         {
+            if (Time.time - _lastCombatTime < _combatCooldown) return;
+            
             var enemyController = enemy.controller;
             var enemyCombatSystem = enemyController.combatSystem;
             if (!enemyCombatSystem) return;
             
+            _lastCombatTime = Time.time;
             CombatResult result = _combatResolver.ResolveCombat(_controller.Unit, enemyController.Unit);
             ApplyCombatResult(result);
         }
@@ -49,9 +58,7 @@ namespace ClashingArmies.Combat
             result.Winner.health.TakeDamage(result.DamageDealt);
             result.Loser.health.TakeDamage(result.Loser.health.MaxHealth);
             
-            // Efeitos visuais
-            //SpawnHitEffect(result.Winner.Transform.position);
-            //SpawnDeathEffect(result.Loser.Transform.position);
+             OnVictory?.Invoke(result.Winner.UnitObject.transform.position);
         }
 
 #if UNITY_EDITOR
