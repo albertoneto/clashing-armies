@@ -32,7 +32,6 @@ namespace ClashingArmies.Combat
             
             if (hitObject == _transform.gameObject) return null;
             if (Physics.GetIgnoreLayerCollision(_ownerLayer, hitObject.layer)) return null;
-            Debug.Log($"{_transform.name} vs {hitObject.name}");
 
             return _unitsManager.GetUnit(hitObject);
         }

@@ -41,9 +41,9 @@ namespace ClashingArmies.Units
             return this;
         }
 
-        public UnitBuilder SetUnitController()
+        public UnitBuilder SetUnitController(UnitsManager unitsManager)
         {
-            _unit.controller = new UnitController(_unit, _poolingSystem);
+            _unit.controller = new UnitController(_unit, _poolingSystem, unitsManager);
             return this;
         }
 

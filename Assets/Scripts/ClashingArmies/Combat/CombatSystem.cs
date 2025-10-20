@@ -14,7 +14,6 @@ namespace ClashingArmies.Combat
         private ICombatResolver _combatResolver;
         private StateMachine _stateMachine;
         private CombatSettings _combatSettings;
-        private float _lastCombatTime = -999f;
         
         public void Initialize(UnitController controller, CombatSettings combatSettings, UnitsManager unitsManager)
         {
@@ -27,34 +26,40 @@ namespace ClashingArmies.Combat
             _owner = controller.Unit;
             _combatSettings = combatSettings;
             _stateMachine = controller.stateMachine;
-            _enemyDetector = new CombatDetector(transform, _owner.CombatLayer, _owner.DetectionRadius, unitsManager);
+            _enemyDetector = new CombatDetector(_owner.GameObject.transform, _owner.CombatLayer, _owner.DetectionRadius, unitsManager);
             _combatResolver = new CombatResolver(combatSettings);
         }
         
         private void Update()
         {
-            if (_enemyDetector == null || _owner == null) return;
-            if (!_owner.CanEngageCombat()) return;
-            if (IsInCombatState()) return;    
-            if (Time.time - _lastCombatTime < _combatSettings.combatCooldown) return;
-            
-            ICombatant enemy = _enemyDetector.FindFirst();
-            if (enemy == null) return;
-            if (!enemy.CanEngageCombat()) return;
+            if (!CanStartCombat()) return;
+            if (!CanEnemyEngage(out var enemy)) return;
 
             EnterCombat(enemy);
         }
-        
-        private bool IsInCombatState()
+
+        private bool CanStartCombat()
         {
+            if (_enemyDetector == null || _owner == null) return false;
             if (_stateMachine == null) return false;
-            return _stateMachine.CurrentState is CombatState;
+            if (_stateMachine.CurrentState is CombatState) return false;    
+            if (!_owner.CanEngageCombat()) return false;
+            
+            return true;
+        }
+
+        private bool CanEnemyEngage(out ICombatant enemy)
+        {
+            enemy = _enemyDetector.FindFirst();
+            if (enemy == null) return false;
+            if (enemy.Controller.stateMachine.CurrentState is CombatState) return false;
+            if (!enemy.CanEngageCombat()) return false;
+            
+            return true;
         }
 
         private void EnterCombat(ICombatant enemy)
         {
-            if (_stateMachine == null) return;
-            
             CombatResult result = _combatResolver.ResolveCombat(_owner, enemy);
             if (result == null) return;
     
@@ -67,14 +72,8 @@ namespace ClashingArmies.Combat
         {
             yield return new WaitForSeconds(_combatSettings.combatDuration);
 
-            _lastCombatTime = Time.time;
             result.Apply();
-            OnVictory?.Invoke(result.Winner.GameObject.transform.position);
-        }
-
-        public bool HasNearby()
-        {
-            return _enemyDetector?.InRange() ?? false;
+            result.Winner.Controller.combatSystem.OnVictory?.Invoke(result.Winner.GameObject.transform.position);
         }
 
 #if UNITY_EDITOR
@@ -83,7 +82,7 @@ namespace ClashingArmies.Combat
             if (_owner == null) return;
             
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(transform.position, _owner.DetectionRadius);
+            Gizmos.DrawWireSphere(_owner.GameObject.transform.position, _owner.DetectionRadius);
         }
 #endif
     }

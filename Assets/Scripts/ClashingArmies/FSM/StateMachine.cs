@@ -7,20 +7,19 @@ namespace ClashingArmies
     public class StateMachine : MonoBehaviour
     {
         public IState CurrentState { get; private set; }
-        private bool _isTransitioning;
 
         private readonly Dictionary<Type, IState> _states = new();
 
         private void Update()
         {
-            if (CurrentState == null || _isTransitioning) return;
+            if (CurrentState == null) return;
 
             CurrentState.OnUpdate();
         }
 
         private void FixedUpdate()
         {
-            if (CurrentState == null || _isTransitioning) return;
+            if (CurrentState == null) return;
 
             CurrentState.OnFixedUpdate();
         }
@@ -55,23 +54,15 @@ namespace ClashingArmies
                 return;
             }
 
-            if (_isTransitioning)
-            {
-                Debug.LogWarning($"Transition in progress. Can't set state: {type.Name}");
-                return;
-            }
-
             if (!HasState<T>())
             {
                 Debug.LogError($"State not found: {type.Name}. Did you forget to add it?");
                 return;
             }
 
-            _isTransitioning = true;
             CurrentState?.OnExit();
             CurrentState = _states[type];
             CurrentState.OnEnter();
-            _isTransitioning = false;
         }
 
         private bool IsInState<T>() where T : IState

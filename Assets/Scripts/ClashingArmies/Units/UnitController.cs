@@ -1,3 +1,4 @@
+using System;
 using ClashingArmies.Combat;
 using UnityEngine;
 
@@ -11,14 +12,16 @@ namespace ClashingArmies.Units
         
         private Unit _unit;
         private PoolingSystem _poolingSystem;
-        
+        private UnitsManager _unitsManager;
+
         public Unit Unit => _unit;
         
-        public UnitController(Unit unit, PoolingSystem poolingSystem)
+        public UnitController(Unit unit, PoolingSystem poolingSystem, UnitsManager unitsManager)
         {
             _unit = unit;
             stateMachine = _unit.UnitObject.AddComponent<StateMachine>();
             _poolingSystem = poolingSystem;
+            _unitsManager = unitsManager;
             
             InitializeStates();
             SetInitialState();
@@ -35,22 +38,21 @@ namespace ClashingArmies.Units
         {
             switch (_unit.data.initialState)
             {
-                case UnitData.InitialStateType.Patrol:
-                    stateMachine.SetState<PatrolState>();
-                    break;
+                default:
                 case UnitData.InitialStateType.Randomly:
                     stateMachine.SetState<RandomMoveState>();
+                    break;
+                case UnitData.InitialStateType.Patrol:
+                    stateMachine.SetState<PatrolState>();
                     break;
             }
         }
         
         public void HandleDeath()
         {
-            stateMachine.enabled = false;
-            combatSystem.enabled = false;
             _unit.health.ResetHealth();
             _unit.health.OnDeath -= HandleDeath;
-            _unit.Dispose();
+            _unitsManager.RemoveUnit(_unit);
             
             if (_poolingSystem == null || _unit?.UnitObject == null) return;
             _poolingSystem.ReturnToPool(PoolingSystem.PoolType.Unit, _unit.UnitObject);

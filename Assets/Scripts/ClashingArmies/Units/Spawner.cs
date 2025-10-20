@@ -101,7 +101,7 @@ namespace ClashingArmies
             
             Unit unit = new UnitBuilder(_poolingSystem, _unitsManager.gameObject.transform, unitData, spawnPosition)
                 .SetId(_unitsManager.GetUnitCount().ToString())
-                .SetUnitController()
+                .SetUnitController(_unitsManager)
                 .SetCombat(_combatSettings, _unitsManager)
                 .SetHealth()
                 .SetUnitView()

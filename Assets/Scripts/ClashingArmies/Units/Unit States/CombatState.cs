@@ -8,9 +8,6 @@ namespace ClashingArmies
     {
         private static readonly int InCombat = Animator.StringToHash("inCombat");
         private readonly Unit _unit;
-        private readonly float _combatCheckInterval = 0.2f;
-        
-        private float _timeSinceLastCheck;
         
         public CombatState(Unit unit)
         {
@@ -19,36 +16,22 @@ namespace ClashingArmies
 
         public void OnEnter()
         {
-            _timeSinceLastCheck = 0f;
             _unit.view.animator.SetBool(InCombat, true);
+            _unit.controller.combatSystem.OnVictory += ReturnToMovementState;
         }
 
         public void OnExit()
         {
             _unit.view.animator.SetBool(InCombat, false);
+            _unit.controller.combatSystem.OnVictory -= ReturnToMovementState;
         }
 
-        public void OnUpdate()
-        {
-            _timeSinceLastCheck += Time.deltaTime;
-            
-            if (_timeSinceLastCheck >= _combatCheckInterval)
-            {
-                _timeSinceLastCheck = 0f;
-                CheckForCombat();
-            }
-        }
+        public void OnUpdate() { }
         public void OnFixedUpdate() { }
         
-        private void CheckForCombat()
-        {
-            if (_unit.controller.combatSystem.HasNearby()) return;
-            ReturnToMovementState();
-        }
-        private void ReturnToMovementState()
+        private void ReturnToMovementState(Vector3 position)
         {
             var stateMachine = _unit.controller.stateMachine;
-            
             switch (_unit.data.initialState)
             {
                 case UnitData.InitialStateType.Patrol:

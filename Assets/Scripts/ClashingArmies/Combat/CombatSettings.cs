@@ -8,7 +8,6 @@ namespace ClashingArmies.Combat
     [CreateAssetMenu(menuName = "Clashing Armies/Combat Hierarchy", fileName = "CombatHierarchy", order = 1)]
     public class CombatSettings : ScriptableObject
     {
-        [Range(0f, 1f)] public float combatCooldown = 0.5f;
         [Range(0f, 10f)] public float combatDuration = 1f;
         
         [System.Serializable]

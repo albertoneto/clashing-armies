@@ -24,7 +24,7 @@ MonoBehaviour:
   waypoints:
   - {x: 0, y: 0, z: 5}
   - {x: 0, y: 0, z: -5}
-  detectionRadius: 1
+  detectionRadius: 2
   maxHealth: 100
   deathEffect: {fileID: 11400000, guid: f429c94bfaab25c459056435da1ecfe3, type: 2}
   spawnEffect: {fileID: 11400000, guid: 136199ba166076a4b884f1d9c58f3f19, type: 2}

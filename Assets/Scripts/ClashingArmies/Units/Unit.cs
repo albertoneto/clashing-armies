@@ -30,7 +30,7 @@ namespace ClashingArmies.Units
 
         public bool CanEngageCombat()
         {
-            return !IsDead && controller != null && controller.combatSystem.enabled;
+            return !IsDead && controller != null;
         }
 
         public void OnCombatVictory()
