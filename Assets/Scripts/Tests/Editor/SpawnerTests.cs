@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using System.Collections;
 using NUnit.Framework;
 using UnityEngine;
@@ -30,6 +31,21 @@ namespace ClashingArmies.Tests
         public void TearDown()
         {
             if (spawner != null && spawnerObject != null) spawner.StopSpawning();
+    
+            if (unitsManager != null)
+            {
+                var unitsField = typeof(UnitsManager).GetField("_units", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                var unitsDict = unitsField.GetValue(unitsManager) as System.Collections.Generic.Dictionary<GameObject, Unit>;
+                if (unitsDict != null)
+                {
+                    foreach (var unit in unitsDict.Values)
+                    {
+                        if (unit.UnitObject != null)
+                            Object.DestroyImmediate(unit.UnitObject);
+                    }
+                }
+            }
+    
             if (spawnerObject != null) Object.DestroyImmediate(spawnerObject);
             if (unitsManagerObject != null) Object.DestroyImmediate(unitsManagerObject);
             TearDownPoolingSystem();
@@ -136,3 +152,4 @@ namespace ClashingArmies.Tests
         }
     }
 }
+#endif

@@ -16,13 +16,13 @@ namespace ClashingArmies
 
         public void OnEnter()
         {
-            _unit.view.animator.SetBool(InCombat, true);
+            _unit.view.Animator.SetBool(InCombat, true);
             _unit.controller.combatSystem.OnVictory += ReturnToMovementState;
         }
 
         public void OnExit()
         {
-            _unit.view.animator.SetBool(InCombat, false);
+            _unit.view.Animator.SetBool(InCombat, false);
             _unit.controller.combatSystem.OnVictory -= ReturnToMovementState;
         }
 

@@ -1,6 +1,6 @@
 {
-    "name": "ClashingArmies.Tests.PlayMode",
-    "rootNamespace": "ClashingArmies.Tests.PlayMode",
+    "name": "ClashingArmies.Tests",
+    "rootNamespace": "ClashingArmies.Tests",
     "references": [
         "GUID:5eed717e5a06f04459a30c0fdc6f86d4",
         "GUID:0acc523941302664db1f4e527237feb3",

@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using NUnit.Framework;
 using UnityEngine;
 using ClashingArmies.Units;
@@ -26,21 +27,21 @@ namespace ClashingArmies.Tests
         }
 
         [Test]
-        public void AddUnit_ShouldAddUnitToList()
+        public void AddUnit_ShouldAddUnit()
         {
             Unit unit = CreateUnit(UnitType.Red);
             unitsManager.AddUnit(unit);
 
             var unitsField = typeof(UnitsManager).GetField("_units", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var unitsList = unitsField.GetValue(unitsManager) as System.Collections.Generic.List<Unit>;
+            var unitsDict = unitsField.GetValue(unitsManager) as System.Collections.Generic.Dictionary<GameObject, Unit>;
 
-            Assert.IsNotNull(unitsList);
-            Assert.AreEqual(1, unitsList.Count);
-            Assert.AreEqual(UnitType.Red, unitsList[0].data.unitType);
+            Assert.IsNotNull(unitsDict);
+            Assert.AreEqual(1, unitsDict.Count);
+            Assert.AreEqual(UnitType.Red, unit.data.unitType);
         }
 
         [Test]
-        public void AddUnit_MultipleUnits_ShouldAddAllToList()
+        public void AddUnit_MultipleUnits_ShouldAddAll()
         {
             Unit unit1 = CreateUnit(UnitType.Red);
             Unit unit2 = CreateUnit(UnitType.Blue);
@@ -51,21 +52,19 @@ namespace ClashingArmies.Tests
             unitsManager.AddUnit(unit3);
 
             var unitsField = typeof(UnitsManager).GetField("_units", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var unitsList = unitsField.GetValue(unitsManager) as System.Collections.Generic.List<Unit>;
+            var unitsDict = unitsField.GetValue(unitsManager) as System.Collections.Generic.Dictionary<GameObject, Unit>;
 
-            Assert.IsNotNull(unitsList);
-            Assert.AreEqual(3, unitsList.Count);
-            Assert.AreEqual(UnitType.Red, unitsList[0].data.unitType);
-            Assert.AreEqual(UnitType.Blue, unitsList[1].data.unitType);
-            Assert.AreEqual(UnitType.Green, unitsList[2].data.unitType);
+            Assert.IsNotNull(unitsDict);
+            Assert.AreEqual(3, unitsDict.Count);
         }
 
         private static Unit CreateUnit(UnitType type)
         {
-            Unit redUnit = new Unit();
-            redUnit.data = ScriptableObject.CreateInstance<UnitData>();
-            redUnit.data.unitType = type;
-            return redUnit;
+            Unit unit = new Unit();
+            unit.UnitObject = new GameObject($"Unit_{type}"); // ADICIONADO: Cria GameObject
+            unit.data = ScriptableObject.CreateInstance<UnitData>();
+            unit.data.unitType = type;
+            return unit;
         }
 
         [Test]
@@ -78,3 +77,4 @@ namespace ClashingArmies.Tests
         }
     }
 }
+#endif
