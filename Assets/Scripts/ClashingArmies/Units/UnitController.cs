@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace ClashingArmies.Units
 {
-    [RequireComponent(typeof(CombatSystem))]
     public class UnitController
     {
         public CombatSystem combatSystem;
@@ -22,16 +21,15 @@ namespace ClashingArmies.Units
             stateMachine = _unit.UnitObject.AddComponent<StateMachine>();
             _poolingSystem = poolingSystem;
             _unitsManager = unitsManager;
-            
-            InitializeStates();
-            SetInitialState();
         }
 
-        private void InitializeStates()
+        public void InitializeStates()
         {
             stateMachine.AddState(new PatrolState(_unit));
             stateMachine.AddState(new RandomMoveState(_unit));
             stateMachine.AddState(new CombatState(_unit));
+            
+            SetInitialState();
         }
         
         private void SetInitialState()
@@ -51,7 +49,6 @@ namespace ClashingArmies.Units
         public void HandleDeath()
         {
             _unit.health.ResetHealth();
-            _unit.health.OnDeath -= HandleDeath;
             _unitsManager.RemoveUnit(_unit);
             
             if (_poolingSystem == null || _unit?.UnitObject == null) return;

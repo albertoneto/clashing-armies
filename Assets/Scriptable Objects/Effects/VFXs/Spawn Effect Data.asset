@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Spawn Effect Data
   m_EditorClassIdentifier: 
   poolType: 2
-  duration: 0.33
+  duration: 0.5

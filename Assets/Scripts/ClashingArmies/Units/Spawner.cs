@@ -103,6 +103,7 @@ namespace ClashingArmies
                 .SetId(_unitsManager.GetUnitCount().ToString())
                 .SetUnitController(_unitsManager)
                 .SetCombat(_combatSettings, _unitsManager)
+                .SetStates()
                 .SetHealth()
                 .SetUnitView()
                 .Build();

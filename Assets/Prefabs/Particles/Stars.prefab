@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4364354964670000254}
   - component: {fileID: 4364354964670000193}
   m_Layer: 0
-  m_Name: CFXR3 Ambient Glows
+  m_Name: Stars
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

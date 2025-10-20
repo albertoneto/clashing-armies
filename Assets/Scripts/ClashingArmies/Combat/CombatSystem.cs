@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace ClashingArmies.Combat
 {
-    public class CombatSystem : MonoBehaviour
+    public class CombatSystem
     {
         public event Action<Vector3> OnVictory;
         
@@ -14,8 +14,9 @@ namespace ClashingArmies.Combat
         private ICombatResolver _combatResolver;
         private StateMachine _stateMachine;
         private CombatSettings _combatSettings;
+        private WaitForSeconds _waitCombatDuration;
         
-        public void Initialize(UnitController controller, CombatSettings combatSettings, UnitsManager unitsManager)
+        public CombatSystem(UnitController controller, CombatSettings combatSettings, UnitsManager unitsManager)
         {
             if (combatSettings == null)
             {
@@ -28,9 +29,10 @@ namespace ClashingArmies.Combat
             _stateMachine = controller.stateMachine;
             _enemyDetector = new CombatDetector(_owner.GameObject.transform, _owner.CombatLayer, _owner.DetectionRadius, unitsManager);
             _combatResolver = new CombatResolver(combatSettings);
+            _waitCombatDuration = new WaitForSeconds(_combatSettings.combatDuration);
         }
         
-        private void Update()
+        public void Tick()
         {
             if (!CanStartCombat()) return;
             if (!CanEnemyEngage(out var enemy)) return;
@@ -65,12 +67,12 @@ namespace ClashingArmies.Combat
     
             _stateMachine.SetState<CombatState>();
             enemy.Controller.stateMachine.SetState<CombatState>();
-            StartCoroutine(WaitAndResolveCombat(result));
+            _owner.Controller.stateMachine.StartCoroutine(WaitAndResolveCombat(result));
         }
 
         private IEnumerator WaitAndResolveCombat(CombatResult result)
         {
-            yield return new WaitForSeconds(_combatSettings.combatDuration);
+            yield return _waitCombatDuration;
 
             result.Apply();
             result.Winner.Controller.combatSystem.OnVictory?.Invoke(result.Winner.GameObject.transform.position);

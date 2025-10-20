@@ -29,7 +29,7 @@ namespace ClashingArmies
             
             if (_waypoints == null || _waypoints.Length == 0)
             {
-                Debug.LogWarning($"[{_unit.UnitObject.name}] PatrolState: No waypoints defined!");
+                Debug.LogWarning($"[{Unit.UnitObject.name}] PatrolState: No waypoints defined!");
                 return;
             }
 
@@ -53,18 +53,18 @@ namespace ClashingArmies
 
         private void MoveTowards(Vector3 target)
         {
-            Vector3 direction = (target - _unitTransform.position).normalized;
-            _unitTransform.position += direction * _unit.data.speed * Time.deltaTime;
+            Vector3 direction = (target - UnitTransform.position).normalized;
+            UnitTransform.position += direction * Unit.data.speed * Time.deltaTime;
 
             if (direction == Vector3.zero) return;
             
             Quaternion targetRotation = Quaternion.LookRotation(direction);
-            _unitTransform.rotation = Quaternion.Slerp(_unitTransform.rotation, targetRotation, Time.deltaTime * 5f);
+            UnitTransform.rotation = Quaternion.Slerp(UnitTransform.rotation, targetRotation, Time.deltaTime * 5f);
         }
 
         private bool HasReachedWaypoint(Vector3 waypoint)
         {
-            float distance = Vector3.Distance(_unitTransform.position, waypoint);
+            float distance = Vector3.Distance(UnitTransform.position, waypoint);
             return distance <= _waypointReachDistance;
         }
 
@@ -80,7 +80,7 @@ namespace ClashingArmies
 
             for (int i = 0; i < _waypoints.Length; i++)
             {
-                float distance = Vector3.Distance(_unitTransform.position, _waypoints[i]);
+                float distance = Vector3.Distance(UnitTransform.position, _waypoints[i]);
                 if (distance < nearestDistance)
                 {
                     nearestDistance = distance;

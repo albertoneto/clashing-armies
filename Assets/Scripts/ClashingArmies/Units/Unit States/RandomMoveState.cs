@@ -23,45 +23,45 @@ namespace ClashingArmies
         {
             base.OnUpdate();
             
-            if (_unitTransform == null) return;
+            if (UnitTransform == null) return;
             
-            if (_timer >= _unit.data.changeTargetTime)
+            if (Timer >= Unit.data.changeTargetTime)
             {
                 SetNewTarget();
-                _timer = 0f;
+                Timer = 0f;
             }
             
-            Vector3 toTarget = _targetPosition - _unitTransform.position;
+            Vector3 toTarget = _targetPosition - UnitTransform.position;
             float distanceSqr = toTarget.sqrMagnitude;
             
             if (distanceSqr < ReachThresholdSqr)
             {
                 SetNewTarget();
-                _timer = 0f;
+                Timer = 0f;
                 return;
             }
             
-            float moveDistance = _unit.data.speed * Time.deltaTime;
+            float moveDistance = Unit.data.speed * Time.deltaTime;
             
             if (moveDistance * moveDistance > distanceSqr)
             {
-                _unitTransform.position = _targetPosition;
+                UnitTransform.position = _targetPosition;
             }
             else
             {
                 Vector3 direction = toTarget.normalized;
-                _unitTransform.position += direction * moveDistance;
+                UnitTransform.position += direction * moveDistance;
             }
         }
 
         private void SetNewTarget()
         {
-            var offset = _unit.data.randomOffset;
+            var offset = Unit.data.randomOffset;
             Vector3 randomOffset = new Vector3(
                 Random.Range(-offset.x, offset.x),
                 Random.Range(-offset.y, offset.y),
                 Random.Range(-offset.z, offset.z));
-            _targetPosition = _unitTransform.position + randomOffset;
+            _targetPosition = UnitTransform.position + randomOffset;
         }
     }
 }

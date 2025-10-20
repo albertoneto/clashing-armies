@@ -8,22 +8,24 @@ namespace ClashingArmies
     {
         private static readonly int InCombat = Animator.StringToHash("inCombat");
         private readonly Unit _unit;
+        private readonly CombatSystem _combatSystem;
         
         public CombatState(Unit unit)
         {
             _unit = unit;
+            _combatSystem = _unit.controller.combatSystem;
         }
 
         public void OnEnter()
         {
             _unit.view.Animator.SetBool(InCombat, true);
-            _unit.controller.combatSystem.OnVictory += ReturnToMovementState;
+            _combatSystem.OnVictory += ReturnToMovementState;
         }
 
         public void OnExit()
         {
             _unit.view.Animator.SetBool(InCombat, false);
-            _unit.controller.combatSystem.OnVictory -= ReturnToMovementState;
+            _combatSystem.OnVictory -= ReturnToMovementState;
         }
 
         public void OnUpdate() { }

@@ -55,8 +55,13 @@ namespace ClashingArmies.Units
 
         public UnitBuilder SetCombat(CombatSettings combatSettings, UnitsManager unitsManager)
         {
-            _unit.controller.combatSystem = _unit.UnitObject.AddComponent<CombatSystem>();
-            _unit.controller.combatSystem.Initialize(_unit.controller, combatSettings, unitsManager);
+            _unit.controller.combatSystem = new CombatSystem(_unit.controller, combatSettings, unitsManager);
+            return this;
+        }
+
+        public UnitBuilder SetStates()
+        {
+            _unit.controller.InitializeStates();
             return this;
         }
 
