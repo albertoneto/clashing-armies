@@ -6,29 +6,29 @@ namespace ClashingArmies
 {
     public class StateMachine : MonoBehaviour
     {
-        private IState _currentState;
+        public IState CurrentState { get; private set; }
         private bool _isTransitioning;
 
         private readonly Dictionary<Type, IState> _states = new();
 
         private void Update()
         {
-            if (_currentState == null || _isTransitioning) return;
+            if (CurrentState == null || _isTransitioning) return;
 
-            _currentState.OnUpdate();
+            CurrentState.OnUpdate();
         }
 
         private void FixedUpdate()
         {
-            if (_currentState == null || _isTransitioning) return;
+            if (CurrentState == null || _isTransitioning) return;
 
-            _currentState.OnFixedUpdate();
+            CurrentState.OnFixedUpdate();
         }
 
         private void OnDestroy()
         {
-            _currentState?.OnExit();
-            _currentState = null;
+            CurrentState?.OnExit();
+            CurrentState = null;
             _states.Clear();
         }
         
@@ -68,30 +68,20 @@ namespace ClashingArmies
             }
 
             _isTransitioning = true;
-            _currentState?.OnExit();
-            _currentState = _states[type];
-            _currentState.OnEnter();
+            CurrentState?.OnExit();
+            CurrentState = _states[type];
+            CurrentState.OnEnter();
             _isTransitioning = false;
         }
-        
-        public bool IsInState<T>() where T : IState
+
+        private bool IsInState<T>() where T : IState
         {
-            return _currentState != null && _currentState.GetType() == typeof(T);
+            return CurrentState != null && CurrentState.GetType() == typeof(T);
         }
 
-        public bool HasState<T>() where T : IState
+        private bool HasState<T>() where T : IState
         {
             return _states.ContainsKey(typeof(T));
-        }
-
-        public T GetState<T>() where T : IState
-        {
-            var type = typeof(T);
-            if (_states.TryGetValue(type, out var state))
-            {
-                return (T)state;
-            }
-            return default;
         }
     }
 }

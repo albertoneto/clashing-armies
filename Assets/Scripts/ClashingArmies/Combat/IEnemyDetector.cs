@@ -2,7 +2,7 @@ namespace ClashingArmies.Combat
 {
     public interface IEnemyDetector
     {
-        ICombatant FindNearestEnemy();
-        bool HasEnemyInRange();
+        ICombatant FindFirst();
+        bool InRange();
     }
 }

@@ -204,6 +204,7 @@ GameObject:
   - component: {fileID: 6541871482234339883}
   - component: {fileID: -7751890192427469780}
   - component: {fileID: 3844550370269644142}
+  - component: {fileID: 7209112645560365058}
   m_Layer: 0
   m_Name: Base Unit
   m_TagString: Untagged
@@ -343,3 +344,25 @@ MonoBehaviour:
   rotationAxis: {x: 0, y: 1, z: 0}
   rotationSpeed: 90
   useUnscaledTime: 0
+--- !u!95 &7209112645560365058
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5138288392276466616}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 29f74a507459b4f4495cdba74219881c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

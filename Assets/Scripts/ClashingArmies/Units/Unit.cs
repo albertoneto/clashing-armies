@@ -14,6 +14,7 @@ namespace ClashingArmies.Units
         public HealthSystem health;
 
         public UnitType UnitType => data.unitType;
+        public UnitController Controller => controller;
         public int CombatLayer => Mathf.RoundToInt(Mathf.Log(data.layer.value, 2));
         public float DetectionRadius => data.detectionRadius;
         
@@ -39,7 +40,7 @@ namespace ClashingArmies.Units
 
         public void OnCombatDefeat()
         {
-            // Death is already handled by HealthSystem.OnDeath event
+            //death is already handled by HealthSystem.OnDeath event
         }
 
         public void Dispose()

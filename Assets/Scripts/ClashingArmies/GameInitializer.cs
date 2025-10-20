@@ -10,13 +10,13 @@ namespace ClashingArmies
         [SerializeField] private PoolingSystem poolingSystem;
         [SerializeField] private List<Spawner> spawners;
         [SerializeField] private UnitsManager unitsManager;
-        [SerializeField] private CombatHierarchy combatHierarchy;
+        [SerializeField] private CombatSettings combatSettings;
 
         private void Start()
         {
             foreach (var spawner in spawners)
             {
-                spawner.Initialize(poolingSystem, unitsManager, combatHierarchy);
+                spawner.Initialize(poolingSystem, unitsManager, combatSettings);
             }
         }
     }

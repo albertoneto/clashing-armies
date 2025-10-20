@@ -1,6 +1,4 @@
-using System;
 using ClashingArmies.Combat;
-using ClashingArmies.Health;
 using UnityEngine;
 
 namespace ClashingArmies.Units
@@ -9,9 +7,9 @@ namespace ClashingArmies.Units
     public class UnitController
     {
         public CombatSystem combatSystem;
-
+        public StateMachine stateMachine;
+        
         private Unit _unit;
-        private StateMachine _stateMachine;
         private PoolingSystem _poolingSystem;
         
         public Unit Unit => _unit;
@@ -19,7 +17,7 @@ namespace ClashingArmies.Units
         public UnitController(Unit unit, PoolingSystem poolingSystem)
         {
             _unit = unit;
-            _stateMachine = _unit.UnitObject.AddComponent<StateMachine>();
+            stateMachine = _unit.UnitObject.AddComponent<StateMachine>();
             _poolingSystem = poolingSystem;
             
             InitializeStates();
@@ -28,9 +26,9 @@ namespace ClashingArmies.Units
 
         private void InitializeStates()
         {
-            _stateMachine.AddState(new PatrolState(_unit));
-            _stateMachine.AddState(new RandomMoveState(_unit));
-            _stateMachine.AddState(new CombatState());
+            stateMachine.AddState(new PatrolState(_unit));
+            stateMachine.AddState(new RandomMoveState(_unit));
+            stateMachine.AddState(new CombatState(_unit));
         }
         
         private void SetInitialState()
@@ -38,23 +36,24 @@ namespace ClashingArmies.Units
             switch (_unit.data.initialState)
             {
                 case UnitData.InitialStateType.Patrol:
-                    _stateMachine.SetState<PatrolState>();
+                    stateMachine.SetState<PatrolState>();
                     break;
                 case UnitData.InitialStateType.Randomly:
-                    _stateMachine.SetState<RandomMoveState>();
+                    stateMachine.SetState<RandomMoveState>();
                     break;
             }
         }
         
         public void HandleDeath()
         {
-            _stateMachine.enabled = false;
+            stateMachine.enabled = false;
             combatSystem.enabled = false;
             _unit.health.ResetHealth();
             _unit.health.OnDeath -= HandleDeath;
-            
-            _poolingSystem.ReturnToPool(PoolingSystem.PoolType.Unit, _unit.UnitObject);
             _unit.Dispose();
+            
+            if (_poolingSystem == null || _unit?.UnitObject == null) return;
+            _poolingSystem.ReturnToPool(PoolingSystem.PoolType.Unit, _unit.UnitObject);
         }
     }
 }

@@ -53,10 +53,10 @@ namespace ClashingArmies.Units
             return this;
         }
 
-        public UnitBuilder SetCombat(CombatHierarchy combatHierarchy, UnitsManager unitsManager)
+        public UnitBuilder SetCombat(CombatSettings combatSettings, UnitsManager unitsManager)
         {
             _unit.controller.combatSystem = _unit.UnitObject.AddComponent<CombatSystem>();
-            _unit.controller.combatSystem.Initialize(_unit.controller, combatHierarchy, unitsManager);
+            _unit.controller.combatSystem.Initialize(_unit.controller, combatSettings, unitsManager);
             return this;
         }
 

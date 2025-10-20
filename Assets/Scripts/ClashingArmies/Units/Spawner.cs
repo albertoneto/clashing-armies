@@ -16,16 +16,16 @@ namespace ClashingArmies
         
         private PoolingSystem _poolingSystem;
         private UnitsManager _unitsManager;
-        private CombatHierarchy _combatHierarchy;
+        private CombatSettings _combatSettings;
         private Coroutine _spawnCoroutine;
         private int _spawnedUnitsCount;
         private bool _isSpawning;
 
-        public void Initialize(PoolingSystem poolingSystem, UnitsManager unitsManager, CombatHierarchy combatHierarchy = null)
+        public void Initialize(PoolingSystem poolingSystem, UnitsManager unitsManager, CombatSettings combatSettings = null)
         {
             _poolingSystem = poolingSystem;
             _unitsManager = unitsManager;
-            _combatHierarchy = combatHierarchy;
+            _combatSettings = combatSettings;
             
             if (spawnOnStart)
             {
@@ -100,9 +100,9 @@ namespace ClashingArmies
             Vector3 spawnPosition = spawnPoint != null ? spawnPoint.position : transform.position;
             
             Unit unit = new UnitBuilder(_poolingSystem, _unitsManager.gameObject.transform, unitData, spawnPosition)
-                .SetId(units.Count.ToString())
+                .SetId(_unitsManager.GetUnitCount().ToString())
                 .SetUnitController()
-                .SetCombat(_combatHierarchy, _unitsManager)
+                .SetCombat(_combatSettings, _unitsManager)
                 .SetHealth()
                 .SetUnitView()
                 .Build();

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 981c65104e754a92a8902a0e51623e90, type: 3}
-  m_Name: CombatHierarchy
+  m_Name: Combat Settings
   m_EditorClassIdentifier: 
   unitStrengths:
   - unitType: 0

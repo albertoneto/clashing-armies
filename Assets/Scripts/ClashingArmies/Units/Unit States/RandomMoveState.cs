@@ -6,6 +6,7 @@ namespace ClashingArmies
     public class RandomMoveState : MoveState
     {
         private Vector3 _targetPosition;
+        private const float ReachThresholdSqr = 0.01f;
 
         public RandomMoveState(Unit unit) : base(unit)
         {
@@ -15,7 +16,6 @@ namespace ClashingArmies
         public override void OnEnter()
         {
             base.OnEnter();
-            
             SetNewTarget();
         }
 
@@ -32,8 +32,9 @@ namespace ClashingArmies
             }
             
             Vector3 toTarget = _targetPosition - _unitTransform.position;
-            float distance = toTarget.magnitude;
-            if (distance < 0.1f)
+            float distanceSqr = toTarget.sqrMagnitude;
+            
+            if (distanceSqr < ReachThresholdSqr)
             {
                 SetNewTarget();
                 _timer = 0f;
@@ -41,16 +42,16 @@ namespace ClashingArmies
             }
             
             float moveDistance = _unit.data.speed * Time.deltaTime;
-            if (moveDistance > distance)
+            
+            if (moveDistance * moveDistance > distanceSqr)
             {
                 _unitTransform.position = _targetPosition;
             }
             else
             {
-                Vector3 direction = toTarget / distance;
+                Vector3 direction = toTarget.normalized;
                 _unitTransform.position += direction * moveDistance;
             }
-            
         }
 
         private void SetNewTarget()

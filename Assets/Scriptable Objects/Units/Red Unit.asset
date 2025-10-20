@@ -18,11 +18,11 @@ MonoBehaviour:
   unitType: 0
   material: {fileID: 2100000, guid: b49e2dfa2ea8bc54f8faee9f8a101eb4, type: 2}
   initialState: 1
-  speed: 10
-  changeTargetTime: 4
+  speed: 5
+  changeTargetTime: 5
   randomOffset: {x: 10, y: 0, z: 10}
   waypoints: []
-  detectionRadius: 2
+  detectionRadius: 1
   maxHealth: 100
   deathEffect: {fileID: 11400000, guid: f429c94bfaab25c459056435da1ecfe3, type: 2}
   spawnEffect: {fileID: 11400000, guid: 136199ba166076a4b884f1d9c58f3f19, type: 2}

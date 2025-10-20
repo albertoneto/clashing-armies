@@ -14,12 +14,12 @@ namespace ClashingArmies.Combat
         public CombatDetector(Transform transform, int ownerLayer, float detectionRadius, UnitsManager unitsManager)
         {
             _transform = transform;
-            _ownerLayer = Mathf.RoundToInt(Mathf.Log(ownerLayer, 2));
+            _ownerLayer = ownerLayer;
             _detectionRadius = detectionRadius;
             _unitsManager = unitsManager;
         }
         
-        public ICombatant FindNearestEnemy()
+        public ICombatant FindFirst()
         {
             int hitCount = Physics.OverlapSphereNonAlloc(
                 _transform.position, 
@@ -32,13 +32,14 @@ namespace ClashingArmies.Combat
             
             if (hitObject == _transform.gameObject) return null;
             if (Physics.GetIgnoreLayerCollision(_ownerLayer, hitObject.layer)) return null;
+            Debug.Log($"{_transform.name} vs {hitObject.name}");
 
             return _unitsManager.GetUnit(hitObject);
         }
 
-        public bool HasEnemyInRange()
+        public bool InRange()
         {
-            return FindNearestEnemy() != null;
+            return FindFirst() != null;
         }
     }
 }
