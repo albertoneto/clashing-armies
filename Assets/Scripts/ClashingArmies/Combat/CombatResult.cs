@@ -1,18 +1,25 @@
-using ClashingArmies.Units;
-
 namespace ClashingArmies.Combat
 {
     public class CombatResult
     {
-        public Unit Winner { get; }
-        public Unit Loser { get; }
-        public float DamageDealt { get; }
+        public ICombatant Winner { get; }
+        public ICombatant Loser { get; }
+        public float DamageToWinner { get; }
         
-        public CombatResult(Unit winner, Unit loser, float damage)
+        public CombatResult(ICombatant winner, ICombatant loser, float damage)
         {
             Winner = winner;
             Loser = loser;
-            DamageDealt = damage;
+            DamageToWinner = damage;
+        }
+
+        public void Apply()
+        {
+            Winner.TakeDamage(DamageToWinner);
+            Winner.OnCombatVictory();
+            
+            Loser.TakeDamage(Loser.MaxHealth);
+            Loser.OnCombatDefeat();
         }
     }
 }

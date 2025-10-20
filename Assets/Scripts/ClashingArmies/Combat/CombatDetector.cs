@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ClashingArmies.Combat
 {
-    public class CombatDetector
+    public class CombatDetector : IEnemyDetector
     {
         private readonly Transform _transform;
         private readonly int _ownerLayer;
@@ -19,7 +19,7 @@ namespace ClashingArmies.Combat
             _unitsManager = unitsManager;
         }
         
-        public Unit FindNearestEnemy()
+        public ICombatant FindNearestEnemy()
         {
             int hitCount = Physics.OverlapSphereNonAlloc(
                 _transform.position, 
@@ -34,6 +34,11 @@ namespace ClashingArmies.Combat
             if (Physics.GetIgnoreLayerCollision(_ownerLayer, hitObject.layer)) return null;
 
             return _unitsManager.GetUnit(hitObject);
+        }
+
+        public bool HasEnemyInRange()
+        {
+            return FindNearestEnemy() != null;
         }
     }
 }

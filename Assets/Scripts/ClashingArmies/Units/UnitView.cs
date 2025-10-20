@@ -5,12 +5,15 @@ namespace ClashingArmies.Units
 {
     public class UnitView
     {
+        private readonly Animator _animator;
         private readonly EffectsService _effectsService;
         private readonly Unit _unit;
         
         public UnitView(Unit unit, PoolingSystem poolingSystem)
         {
             _unit = unit;
+            
+            _animator = _unit.UnitObject.gameObject.GetComponent<Animator>();
             
             var renderer = _unit.UnitObject.gameObject.GetComponent<MeshRenderer>();
             renderer.material = _unit.data.material;

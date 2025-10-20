@@ -1,9 +1,10 @@
+using ClashingArmies.Combat;
 using ClashingArmies.Health;
 using UnityEngine;
 
 namespace ClashingArmies.Units
 {
-    public class Unit
+    public class Unit : ICombatant
     {
         public string id;
         public GameObject UnitObject;
@@ -11,6 +12,35 @@ namespace ClashingArmies.Units
         public UnitController controller;
         public UnitView view;
         public HealthSystem health;
+
+        public UnitType UnitType => data.unitType;
+        public int CombatLayer => Mathf.RoundToInt(Mathf.Log(data.layer.value, 2));
+        public float DetectionRadius => data.detectionRadius;
+        
+        public float CurrentHealth => health.CurrentHealth;
+        public float MaxHealth => health.MaxHealth;
+        public bool IsDead => health.CurrentHealth <= 0;
+        public GameObject GameObject => UnitObject;
+
+        public void TakeDamage(float amount)
+        {
+            health.TakeDamage(amount);
+        }
+
+        public bool CanEngageCombat()
+        {
+            return !IsDead && controller != null && controller.combatSystem.enabled;
+        }
+
+        public void OnCombatVictory()
+        {
+            //view?.PlayVictoryEffect();
+        }
+
+        public void OnCombatDefeat()
+        {
+            // Death is already handled by HealthSystem.OnDeath event
+        }
 
         public void Dispose()
         {

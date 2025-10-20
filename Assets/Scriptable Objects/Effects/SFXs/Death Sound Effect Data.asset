@@ -15,7 +15,7 @@ MonoBehaviour:
   poolType: 4
   duration: 0.5
   clip: {fileID: 8300000, guid: 50b61d432525747478302fd5e57b8aaf, type: 3}
-  volume: 0.8
-  randomizePitch: 0
-  minPitch: 1
-  maxPitch: 1
+  volume: 0.2
+  randomizePitch: 1
+  minPitch: 0.9
+  maxPitch: 1.1

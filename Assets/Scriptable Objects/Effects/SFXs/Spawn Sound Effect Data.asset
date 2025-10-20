@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Spawn Sound Effect Data
   m_EditorClassIdentifier: 
   poolType: 4
-  duration: 0.3
+  duration: 0.35
   clip: {fileID: 8300000, guid: 8ef023b49889da94f88c22a1c90c0a1a, type: 3}
-  volume: 0.6
+  volume: 0.2
   randomizePitch: 1
   minPitch: 0.5
   maxPitch: 1.2

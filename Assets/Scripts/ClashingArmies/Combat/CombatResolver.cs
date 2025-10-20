@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ClashingArmies.Combat
 {
-    public class CombatResolver
+    public class CombatResolver : ICombatResolver
     {
         private readonly CombatHierarchy _hierarchy;
         
@@ -12,17 +12,17 @@ namespace ClashingArmies.Combat
             _hierarchy = hierarchy;
         }
         
-        public CombatResult ResolveCombat(Unit unit1, Unit unit2)
+        public CombatResult ResolveCombat(ICombatant unit1, ICombatant unit2)
         {
-            UnitType strongerType = _hierarchy.GetStrongerUnit(unit1.data.unitType, unit2.data.unitType);
-            Unit stronger = unit1.data.unitType == strongerType ? unit1 : unit2;
-            Unit weaker = stronger == unit1 ? unit2 : unit1;
+            UnitType strongerType = _hierarchy.GetStrongerUnit(unit1.UnitType, unit2.UnitType);
+            ICombatant stronger = unit1.UnitType == strongerType ? unit1 : unit2;
+            ICombatant weaker = stronger == unit1 ? unit2 : unit1;
             
             bool randomWin = Random.value < _hierarchy.randomWinChance;
-            Unit winner = randomWin ? weaker : stronger;
-            Unit loser = randomWin ? stronger : weaker;
+            ICombatant winner = randomWin ? weaker : stronger;
+            ICombatant loser = randomWin ? stronger : weaker;
             
-            float damageToWinner = winner.health.MaxHealth * _hierarchy.winnerDamagePercent / 100;
+            float damageToWinner = winner.MaxHealth * _hierarchy.winnerDamagePercent / 100;
             return new CombatResult(winner, loser, damageToWinner);
         }
     }

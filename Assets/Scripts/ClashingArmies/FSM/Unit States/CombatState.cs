@@ -12,19 +12,13 @@ namespace ClashingArmies
 
         public void OnEnter()
         {
-        /*
-            var targetHealth = other.gameObject.GetComponent<HealthSystem>();
-            if (targetHealth != null && !targetHealth.IsDead)
-            {
-                targetHealth.TakeDamage(_unit.data.Damage);
-            }
-            */
+        
         }
         public void OnExit() { }
 
         public void OnUpdate()
         {
-            Debug.Log("CombatState.OnUpdate()");
+            
         }
         public void OnFixedUpdate() { }
     }
