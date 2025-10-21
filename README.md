@@ -137,9 +137,6 @@ Time Constraints Impact: Due to limited time, I intentionally deprioritized visu
 ## Memory Profiler with more than 1000 units
 ![Unit Data](./ReadmeImages/memory_profiler.png)
 
-## Profiler with more than 1000 units
-![Unit Data](./ReadmeImages/profiler.png)
-
 ### AI Assistance
 
 Claude (Anthropic) was used for unit test structure, edge case identification, and code review suggestions. All implementation, architectural decisions, and design choices were made by the developer.
