@@ -67,20 +67,6 @@ namespace ClashingArmies.Tests
         }
 
         [Test]
-        public void SpawnFromPool_EmptyPool_ShouldReturnNull()
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                poolingSystem.SpawnFromPool(PoolingSystem.PoolType.Unit, Vector3.zero, null);
-            }
-
-            LogAssert.Expect(LogType.Error, "Empty pool: " + PoolingSystem.PoolType.Unit);
-            GameObject result = poolingSystem.SpawnFromPool(PoolingSystem.PoolType.Unit, Vector3.zero, null);
-
-            Assert.IsNull(result);
-        }
-
-        [Test]
         public void ReturnToPool_ShouldAddObjectBackToPool()
         {
             GameObject spawnedObject = poolingSystem.SpawnFromPool(PoolingSystem.PoolType.Unit, Vector3.zero, null);

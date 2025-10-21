@@ -69,7 +69,8 @@ namespace ClashingArmies.Units
         {
             _unit.health = new HealthSystem(_unit.data.maxHealth);
             _unit.health.OnDeath += _unit.controller.HandleDeath;
-            _unit.UnitObject.GetComponentInChildren<HealthBarUI>().Initialize(_unit.health);
+            var healthBarUI = _unit.UnitObject.GetComponentInChildren<HealthBarUI>();
+            healthBarUI?.Initialize(_unit.health);
             return this;
         }
 

@@ -12,7 +12,6 @@ namespace ClashingArmies
         [SerializeField, Range(0, 100)] private float timeBetweenSpawns = 2f;
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private bool spawnOnStart = true;
-        [SerializeField] private int maxUnitsToSpawn = -1;
         
         private PoolingSystem _poolingSystem;
         private UnitsManager _unitsManager;
@@ -74,12 +73,6 @@ namespace ClashingArmies
         {
             while (_isSpawning)
             {
-                if (maxUnitsToSpawn > 0 && _spawnedUnitsCount >= maxUnitsToSpawn)
-                {
-                    StopSpawning();
-                    yield break;
-                }
-
                 SpawnRandomUnit();
                 _spawnedUnitsCount++;
 

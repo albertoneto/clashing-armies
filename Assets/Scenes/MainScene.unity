@@ -168,7 +168,6 @@ MonoBehaviour:
   timeBetweenSpawns: 2
   spawnPoint: {fileID: 0}
   spawnOnStart: 1
-  maxUnitsToSpawn: -1
 --- !u!1 &189375251
 GameObject:
   m_ObjectHideFlags: 0
@@ -218,7 +217,6 @@ MonoBehaviour:
   timeBetweenSpawns: 1
   spawnPoint: {fileID: 0}
   spawnOnStart: 1
-  maxUnitsToSpawn: -1
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -561,16 +559,16 @@ MonoBehaviour:
   pools:
   - poolType: 0
     prefab: {fileID: 5138288392276466616, guid: d49b8b438a0f58f4ba5b103d25248a83, type: 3}
-    size: 9999
+    size: 1999
   - poolType: 1
     prefab: {fileID: 2504214343621411470, guid: 3ed0d324122d7b24eaec75c55c74aafc, type: 3}
-    size: 999
+    size: 499
   - poolType: 2
     prefab: {fileID: 3366619543761277323, guid: 7e4d6103539c6ad409391bb5a188b603, type: 3}
-    size: 999
+    size: 499
   - poolType: 4
     prefab: {fileID: 4411139162093273760, guid: 080992abdb09dd048b53b83630c54cae, type: 3}
-    size: 999
+    size: 499
 --- !u!4 &645139907
 Transform:
   m_ObjectHideFlags: 0
@@ -757,7 +755,6 @@ MonoBehaviour:
   timeBetweenSpawns: 3
   spawnPoint: {fileID: 0}
   spawnOnStart: 1
-  maxUnitsToSpawn: -1
 --- !u!1 &1003964695
 GameObject:
   m_ObjectHideFlags: 0
@@ -1423,7 +1420,6 @@ MonoBehaviour:
   timeBetweenSpawns: 5
   spawnPoint: {fileID: 0}
   spawnOnStart: 1
-  maxUnitsToSpawn: -1
 --- !u!1 &2096150459
 GameObject:
   m_ObjectHideFlags: 0

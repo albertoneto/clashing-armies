@@ -25,13 +25,19 @@ namespace ClashingArmies
 
                 for (int i = 0; i < pool.size; i++)
                 {
-                    GameObject obj = Instantiate(pool.prefab, transform, true);
+                    var obj = InstantiateObject(pool);
                     objectPool.Enqueue(obj);
-                    obj.SetActive(false);
                 }
 
                 _poolDictionary.Add(pool.poolType, objectPool);
             }
+        }
+
+        private GameObject InstantiateObject(Pool pool)
+        {
+            GameObject obj = Instantiate(pool.prefab, transform, true);
+            obj.SetActive(false);
+            return obj;
         }
 
         public GameObject SpawnFromPool(PoolType poolType, Vector3 position, Transform parent, string name = null)
@@ -41,20 +47,28 @@ namespace ClashingArmies
                 Debug.LogWarning("Pool with type " + poolType + " doesn't exist.");
                 return null;
             }
+
             if (_poolDictionary[poolType].Count == 0)
             {
-                Debug.LogError("Empty pool: " + poolType);
-                return null;
+                Debug.LogWarning("Empty pool: " + poolType);Pool pool = pools.Find(p => p.poolType == poolType);
+                
+                GameObject instantiateObject = InstantiateObject(pool);
+                SetObject(position, parent, name, instantiateObject);
+                return instantiateObject;
             }
 
             GameObject objectToSpawn = _poolDictionary[poolType].Dequeue();
+            SetObject(position, parent, name, objectToSpawn);
 
+            return objectToSpawn;
+        }
+
+        private static void SetObject(Vector3 position, Transform parent, string name, GameObject objectToSpawn)
+        {
             objectToSpawn.transform.SetParent(parent);
             objectToSpawn.transform.position = position;
             if(!string.IsNullOrEmpty(name)) objectToSpawn.name = name;
             objectToSpawn.SetActive(true);
-
-            return objectToSpawn;
         }
 
         public void ReturnToPool(PoolType poolTypes, GameObject objectToReturn)

@@ -14,8 +14,8 @@ namespace ClashingArmies.Units
         {
             _unit = unit;
             
-            var renderer = _unit.GameObject.GetComponentInChildren<MeshRenderer>();
-            renderer.material = _unit.data.material;
+            MeshRenderer renderer = _unit.GameObject.GetComponentInChildren<MeshRenderer>();
+            if(renderer) renderer.material = _unit.data.material;
 
             _rotateAnimations.AddRange(_unit.GameObject.GetComponents<RotateAnimation>());
             
@@ -27,12 +27,16 @@ namespace ClashingArmies.Units
 
         private void SpawnEffect()
         {
+            if(_effectsService == null) return;
+            
             _effectsService.PlayEffect(_unit.data.spawnEffect, _unit.UnitObject.transform.position);
             _effectsService.PlayEffect(_unit.data.spawnSfxEffect, _unit.UnitObject.transform.position);
         }
 
         private void DeathEffect()
         {
+            if(_effectsService == null) return;
+
             _effectsService.PlayEffect(_unit.data.deathEffect, _unit.UnitObject.transform.position);
             _effectsService.PlayEffect(_unit.data.deathSfxEffect, _unit.UnitObject.transform.position);
             

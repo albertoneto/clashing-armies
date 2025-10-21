@@ -16,13 +16,15 @@ namespace ClashingArmies.Effects
         
         public void PlayEffect(VisualEffectData effectData, Vector3 position)
         {
+            if (effectData == null || _poolingSystem == null) return;
+            
             GameObject vfx = _poolingSystem.SpawnFromPool(effectData.poolType, position, null);
             _coroutineRunner.StartCoroutine(ReturnToPoolAfterDelay(effectData, vfx));
         }
         
         public void PlayEffect(SoundEffectData sfx, Vector3 position)
         {
-            if (sfx.clip == null || _poolingSystem == null) return;
+            if (sfx == null || _poolingSystem == null) return;
             
             GameObject audioSourceGO = _poolingSystem.SpawnFromPool(PoolingSystem.PoolType.AudioSource, position, null);
             AudioSource source = audioSourceGO.GetComponent<AudioSource>();

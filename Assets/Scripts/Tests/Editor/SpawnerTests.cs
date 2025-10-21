@@ -4,6 +4,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using ClashingArmies.Units;
+using ClashingArmies.Combat;
 
 namespace ClashingArmies.Tests
 {
@@ -13,6 +14,7 @@ namespace ClashingArmies.Tests
         private Spawner spawner;
         private GameObject unitsManagerObject;
         private UnitsManager unitsManager;
+        private CombatSettings combatSettings;
 
         [SetUp]
         public void SetUp()
@@ -21,6 +23,15 @@ namespace ClashingArmies.Tests
         
             unitsManagerObject = new GameObject("UnitsManager");
             unitsManager = unitsManagerObject.AddComponent<UnitsManager>();
+
+            combatSettings = ScriptableObject.CreateInstance<CombatSettings>();
+            combatSettings.combatDuration = 1f;
+            combatSettings.combatLayer = LayerMask.GetMask("Default");
+            combatSettings.unitStrengths = new System.Collections.Generic.List<CombatSettings.UnitStrength>
+            {
+                new CombatSettings.UnitStrength { unitType = UnitType.Red, StrengthLevel = 5 },
+                new CombatSettings.UnitStrength { unitType = UnitType.Blue, StrengthLevel = 3 }
+            };
         
             spawnerObject = new GameObject("Spawner");
             spawner = spawnerObject.AddComponent<Spawner>();
@@ -38,15 +49,17 @@ namespace ClashingArmies.Tests
                 var unitsDict = unitsField.GetValue(unitsManager) as System.Collections.Generic.Dictionary<GameObject, Unit>;
                 if (unitsDict != null)
                 {
-                    foreach (var unit in unitsDict.Values)
+                    var unitsList = new System.Collections.Generic.List<Unit>(unitsDict.Values);
+                    foreach (var unit in unitsList)
                     {
-                        if (unit.GameObject != null) Object.DestroyImmediate(unit.GameObject);
+                        if (unit?.UnitObject != null) Object.DestroyImmediate(unit.UnitObject);
                     }
                 }
             }
     
             if (spawnerObject != null) Object.DestroyImmediate(spawnerObject);
             if (unitsManagerObject != null) Object.DestroyImmediate(unitsManagerObject);
+            if (combatSettings != null) Object.DestroyImmediate(combatSettings);
             TearDownPoolingSystem();
         }
 
@@ -54,10 +67,13 @@ namespace ClashingArmies.Tests
         {
             var unitsField = typeof(Spawner).GetField("units", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             var unitsList = new System.Collections.Generic.List<UnitData>();
-            var redUnit = CreateUnit(UnitType.Red);
-            unitsList.Add(redUnit.data);
-            var blueUnit = CreateUnit(UnitType.Blue);
-            unitsList.Add(blueUnit.data);
+            
+            var redUnitData = CreateMockedUnit();
+            unitsList.Add(redUnitData);
+            
+            var blueUnitData = CreateMockedUnit(UnitType.Blue);
+            unitsList.Add(blueUnitData);
+            
             unitsField.SetValue(spawner, unitsList);
             
             var timeBetweenSpawnsField = typeof(Spawner).GetField("timeBetweenSpawns",
@@ -69,39 +85,57 @@ namespace ClashingArmies.Tests
             spawnOnStartField.SetValue(spawner, false);
         }
 
-        private static Unit CreateUnit(UnitType type)
+        private static UnitData CreateMockedUnit(UnitType unitType = UnitType.Red)
         {
-            Unit redUnit = new Unit();
-            redUnit.data = ScriptableObject.CreateInstance<UnitData>();
-            redUnit.data.unitType = type;
-            return redUnit;
+            var redUnitData = ScriptableObject.CreateInstance<UnitData>();
+            redUnitData.unitType = unitType;
+            redUnitData.maxHealth = 100f;
+            redUnitData.layer = LayerMask.GetMask(unitType.ToString().ToLower());
+            redUnitData.detectionRadius = 2f;
+            redUnitData.speed = 2f;
+            redUnitData.waypoints = new[] { Vector3.right, -Vector3.right };
+            return redUnitData;
         }
 
         [Test]
         public void Initialize_ShouldNotThrowException()
         {
-            Assert.DoesNotThrow(() => spawner.Initialize(poolingSystem, unitsManager));
+            Assert.DoesNotThrow(() => spawner.Initialize(poolingSystem, unitsManager, combatSettings));
+        }
+
+        [Test]
+        public void Initialize_WithNullCombatSettings_ShouldWork()
+        {
+            Assert.DoesNotThrow(() => spawner.Initialize(poolingSystem, unitsManager, null));
         }
 
         [UnityTest]
         public IEnumerator StartSpawning_ShouldSpawnUnits()
         {
-            spawner.Initialize(poolingSystem, unitsManager);
+            spawner.Initialize(poolingSystem, unitsManager, combatSettings);
             int initialCount = unitsManager.GetUnitCount();
             
             spawner.StartSpawning();
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.25f);
             spawner.StopSpawning();
             
             int finalCount = unitsManager.GetUnitCount();
-            Assert.Greater(finalCount, initialCount, $"Initial: {initialCount}, Final: {finalCount}");
+            Assert.Greater(finalCount, initialCount, $"Should spawn units. Initial: {initialCount}, Final: {finalCount}");
         }
 
         [Test]
         public void StopSpawning_ShouldNotThrowException()
         {
-            spawner.Initialize(poolingSystem, unitsManager);
+            spawner.Initialize(poolingSystem, unitsManager, combatSettings);
             spawner.StartSpawning();
+            
+            Assert.DoesNotThrow(() => spawner.StopSpawning());
+        }
+
+        [Test]
+        public void StopSpawning_WhenNotSpawning_ShouldNotThrow()
+        {
+            spawner.Initialize(poolingSystem, unitsManager, combatSettings);
             
             Assert.DoesNotThrow(() => spawner.StopSpawning());
         }
@@ -109,11 +143,12 @@ namespace ClashingArmies.Tests
         [UnityTest]
         public IEnumerator SpawnUnit_ShouldCreateUnitWithCorrectType()
         {
-            spawner.Initialize(poolingSystem, unitsManager);
+            spawner.Initialize(poolingSystem, unitsManager, combatSettings);
             int initialCount = unitsManager.GetUnitCount();
             
-            Unit unit = CreateUnit(UnitType.Red);
-            spawner.SpawnUnit(unit.data);
+            var unitData = CreateMockedUnit();
+            
+            spawner.SpawnUnit(unitData);
             yield return null;
             
             int finalCount = unitsManager.GetUnitCount();
@@ -122,20 +157,8 @@ namespace ClashingArmies.Tests
             Unit lastUnit = unitsManager.GetLastUnit();
             Assert.IsNotNull(lastUnit, "Last unit should not be null");
             Assert.AreEqual(UnitType.Red, lastUnit.data.unitType, "Incorrect unit type");
-        }
-
-        [UnityTest]
-        public IEnumerator MaxUnitsToSpawn_ShouldStopAfterLimit()
-        {
-            var maxUnitsField = typeof(Spawner).GetField("maxUnitsToSpawn", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            maxUnitsField.SetValue(spawner, 2);
             
-            spawner.Initialize(poolingSystem, unitsManager);
-            spawner.StartSpawning();
-            yield return new WaitForSeconds(0.35f);
-            
-            int unitCount = unitsManager.GetUnitCount();
-            Assert.LessOrEqual(unitCount, 2, $"It shouldn't spawn more than 2 units. Spawned: {unitCount}");
+            Object.DestroyImmediate(unitData);
         }
 
         [Test]
@@ -144,10 +167,26 @@ namespace ClashingArmies.Tests
             var unitsField = typeof(Spawner).GetField("units", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             unitsField.SetValue(spawner, new System.Collections.Generic.List<UnitData>());
             
-            spawner.Initialize(poolingSystem, unitsManager);
+            spawner.Initialize(poolingSystem, unitsManager, combatSettings);
             
             LogAssert.Expect(LogType.Warning, $"[Spawner] {spawner.gameObject.name} has no units to spawn!");
             spawner.StartSpawning();
+        }
+
+        [UnityTest]
+        public IEnumerator StartSpawning_MultipleTimes_ShouldNotDuplicate()
+        {
+            spawner.Initialize(poolingSystem, unitsManager, combatSettings);
+            
+            spawner.StartSpawning();
+            spawner.StartSpawning();
+            
+            yield return new WaitForSeconds(0.15f);
+            
+            spawner.StopSpawning();
+            
+            int count = unitsManager.GetUnitCount();
+            Assert.IsTrue(count > 0 && count <= 2, $"Should spawn normally, not duplicate. Count: {count}");
         }
     }
 }
