@@ -6,7 +6,7 @@ namespace ClashingArmies.Combat
 {
     public class CombatSystem
     {
-        private const float TickCooldown = .2f;
+        private const float TickCooldown = .02f;
         public event Action OnVictory;
         
         private ICombatant _owner;

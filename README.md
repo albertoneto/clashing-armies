@@ -134,7 +134,13 @@ Steps 5-8 repeat iteratively until completion.
 
 Time Constraints Impact: Due to limited time, I intentionally deprioritized visual polish and complex features like NavMesh integration. The primary objective of this technical evaluation was to demonstrate solid architecture, scalable systems, clean code, and performance optimization, which required the focus on Phases 1-3 and architecture design (SOLID/Patterns) over visual presentation. 
 
-## AI Assistance
+## Memory Profiler with more than 1000 units
+![Unit Data](./ReadmeImages/memory_profiler.png)
+
+## Profiler with more than 1000 units
+![Unit Data](./ReadmeImages/profiler.png)
+
+### AI Assistance
 
 Claude (Anthropic) was used for unit test structure, edge case identification, and code review suggestions. All implementation, architectural decisions, and design choices were made by the developer.
 
