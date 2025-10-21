@@ -1,7 +1,7 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace ClashingArmies
+namespace ClashingArmies.Combat
 {
     public class CombatAnimation : MonoBehaviour
     {

@@ -23,7 +23,8 @@ MonoBehaviour:
   randomOffset: {x: 0, y: 0, z: 0}
   waypoints:
   - {x: 0, y: 0, z: 10}
-  - {x: 0, y: 0, z: -10}
+  - {x: 0, y: 0, z: -15}
+  - {x: 10, y: 0, z: -15}
   detectionRadius: 2
   maxHealth: 100
   deathEffect: {fileID: 11400000, guid: f429c94bfaab25c459056435da1ecfe3, type: 2}

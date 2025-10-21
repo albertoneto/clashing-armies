@@ -6,7 +6,7 @@ namespace ClashingArmies.Combat
 {
     public class CombatSystem
     {
-        private const float TickCooldown = .02f;
+        private const float TickCooldown = .1f;
         public event Action OnVictory;
         
         private ICombatant _owner;
@@ -36,9 +36,9 @@ namespace ClashingArmies.Combat
         
         public void Tick()
         {
+            if(Time.time - _lastTick < TickCooldown) return;
             _lastTick = Time.time;
-            if(Time.time - _lastTick > TickCooldown) return;
-            
+
             if (_pendingResult != null)
             {
                 if (CheckCombatResolution())
