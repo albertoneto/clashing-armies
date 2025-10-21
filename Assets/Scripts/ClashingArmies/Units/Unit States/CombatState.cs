@@ -17,13 +17,13 @@ namespace ClashingArmies
 
         public void OnEnter()
         {
-            _unit.view.ToggleRotation();
+            _unit.view.SetCombatRotation(true);
             _combatSystem.OnVictory += ReturnToMovementState;
         }
 
         public void OnExit()
         {
-            _unit.view.ToggleRotation();
+            _unit.view.SetCombatRotation(false);
             _combatSystem.OnVictory -= ReturnToMovementState;
         }
 

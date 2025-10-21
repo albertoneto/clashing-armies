@@ -19,7 +19,7 @@ MonoBehaviour:
   - unitType: 2
     StrengthLevel: 1
   - unitType: 1
-    StrengthLevel: 1
+    StrengthLevel: 2
   - unitType: 3
     StrengthLevel: 5
   randomWinChance: 0.2
