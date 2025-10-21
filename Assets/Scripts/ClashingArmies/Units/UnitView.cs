@@ -14,8 +14,11 @@ namespace ClashingArmies.Units
         {
             _unit = unit;
             
-            MeshRenderer renderer = _unit.GameObject.GetComponentInChildren<MeshRenderer>();
-            if(renderer) renderer.material = _unit.data.material;
+            MeshRenderer[] renderers = _unit.GameObject.GetComponentsInChildren<MeshRenderer>();
+            foreach (MeshRenderer renderer in renderers)
+            {
+                renderer.material = _unit.data.material;
+            }
 
             _rotateAnimations.AddRange(_unit.GameObject.GetComponents<RotateAnimation>());
             
