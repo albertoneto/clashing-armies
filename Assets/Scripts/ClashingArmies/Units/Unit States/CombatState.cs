@@ -6,7 +6,6 @@ namespace ClashingArmies
 {
     public class CombatState : IState
     {
-        private static readonly int InCombat = Animator.StringToHash("inCombat");
         private readonly Unit _unit;
         private readonly CombatSystem _combatSystem;
         
@@ -18,20 +17,23 @@ namespace ClashingArmies
 
         public void OnEnter()
         {
-            _unit.view.Animator.SetBool(InCombat, true);
+            _unit.view.ToggleRotation();
             _combatSystem.OnVictory += ReturnToMovementState;
         }
 
         public void OnExit()
         {
-            _unit.view.Animator.SetBool(InCombat, false);
+            _unit.view.ToggleRotation();
             _combatSystem.OnVictory -= ReturnToMovementState;
         }
 
-        public void OnUpdate() { }
+        public void OnUpdate() 
+        { 
+            _combatSystem.Tick();
+        }
         public void OnFixedUpdate() { }
         
-        private void ReturnToMovementState(Vector3 position)
+        private void ReturnToMovementState()
         {
             var stateMachine = _unit.controller.stateMachine;
             switch (_unit.data.initialState)

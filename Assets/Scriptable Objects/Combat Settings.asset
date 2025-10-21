@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 981c65104e754a92a8902a0e51623e90, type: 3}
   m_Name: Combat Settings
   m_EditorClassIdentifier: 
+  combatDuration: 1
   unitStrengths:
   - unitType: 0
     StrengthLevel: 10
@@ -23,3 +24,6 @@ MonoBehaviour:
     StrengthLevel: 5
   randomWinChance: 0.2
   winnerDamagePercent: 20
+  combatLayer:
+    serializedVersion: 2
+    m_Bits: 960

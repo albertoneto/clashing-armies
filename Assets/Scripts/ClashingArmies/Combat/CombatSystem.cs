@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using ClashingArmies.Units;
 using UnityEngine;
 
@@ -7,14 +6,18 @@ namespace ClashingArmies.Combat
 {
     public class CombatSystem
     {
-        public event Action<Vector3> OnVictory;
+        private const float TickCooldown = .2f;
+        public event Action OnVictory;
         
         private ICombatant _owner;
         private IEnemyDetector _enemyDetector;
         private ICombatResolver _combatResolver;
         private StateMachine _stateMachine;
         private CombatSettings _combatSettings;
-        private WaitForSeconds _waitCombatDuration;
+        
+        private CombatResult _pendingResult;
+        private float _combatStartTime;
+        private float _lastTick;
         
         public CombatSystem(UnitController controller, CombatSettings combatSettings, UnitsManager unitsManager)
         {
@@ -27,17 +30,44 @@ namespace ClashingArmies.Combat
             _owner = controller.Unit;
             _combatSettings = combatSettings;
             _stateMachine = controller.stateMachine;
-            _enemyDetector = new CombatDetector(_owner.GameObject.transform, _owner.CombatLayer, _owner.DetectionRadius, unitsManager);
+            _enemyDetector = new CombatDetector(_owner, combatSettings, unitsManager);
             _combatResolver = new CombatResolver(combatSettings);
-            _waitCombatDuration = new WaitForSeconds(_combatSettings.combatDuration);
         }
         
         public void Tick()
         {
+            if(Time.time - _lastTick > TickCooldown) return;
+            _lastTick = Time.time;
+            if (_pendingResult != null)
+            {
+                if (CheckCombatResolution())
+                {
+                    return;
+                }
+            }
+            
             if (!CanStartCombat()) return;
             if (!CanEnemyEngage(out var enemy)) return;
 
             EnterCombat(enemy);
+        }
+
+        private bool CheckCombatResolution()
+        {
+            if (Time.time - _combatStartTime < _combatSettings.combatDuration) return false;
+            
+            return ResolveCombat();
+        }
+
+        private bool ResolveCombat()
+        {
+            if (_pendingResult == null) return false;
+            
+            _pendingResult.Apply();
+            _pendingResult.Winner.Controller.combatSystem.OnVictory?.Invoke();
+            _pendingResult = null;
+            
+            return true;
         }
 
         private bool CanStartCombat()
@@ -60,22 +90,23 @@ namespace ClashingArmies.Combat
             return true;
         }
 
+        public void SetPendingCombat(CombatResult result, float startTime)
+        {
+            _pendingResult = result;
+            _combatStartTime = startTime;
+        }
+
         private void EnterCombat(ICombatant enemy)
         {
             CombatResult result = _combatResolver.ResolveCombat(_owner, enemy);
             if (result == null) return;
-    
+
             _stateMachine.SetState<CombatState>();
             enemy.Controller.stateMachine.SetState<CombatState>();
-            _owner.Controller.stateMachine.StartCoroutine(WaitAndResolveCombat(result));
-        }
-
-        private IEnumerator WaitAndResolveCombat(CombatResult result)
-        {
-            yield return _waitCombatDuration;
-
-            result.Apply();
-            result.Winner.Controller.combatSystem.OnVictory?.Invoke(result.Winner.GameObject.transform.position);
+    
+            float startTime = Time.time;
+            SetPendingCombat(result, startTime);
+            enemy.Controller.combatSystem.SetPendingCombat(result, startTime);
         }
 
 #if UNITY_EDITOR

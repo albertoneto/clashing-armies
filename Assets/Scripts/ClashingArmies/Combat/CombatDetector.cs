@@ -10,21 +10,24 @@ namespace ClashingArmies.Combat
         private readonly float _detectionRadius;
         private readonly UnitsManager _unitsManager;
         private readonly Collider[] _colliderBuffer = new Collider[1];
-        
-        public CombatDetector(Transform transform, int ownerLayer, float detectionRadius, UnitsManager unitsManager)
+        private readonly LayerMask _combatLayer;
+
+        public CombatDetector(ICombatant combatant, CombatSettings combatSettings, UnitsManager unitsManager)
         {
-            _transform = transform;
-            _ownerLayer = ownerLayer;
-            _detectionRadius = detectionRadius;
+            _transform = combatant.GameObject.transform;
+            _ownerLayer = combatant.CombatLayer;
+            _detectionRadius = combatant.DetectionRadius;
             _unitsManager = unitsManager;
+            _combatLayer = combatSettings.combatLayer;
         }
-        
+
         public ICombatant FindFirst()
         {
             int hitCount = Physics.OverlapSphereNonAlloc(
                 _transform.position, 
                 _detectionRadius, 
-                _colliderBuffer
+                _colliderBuffer,
+                _combatLayer
             );
             
             if (hitCount == 0) return null;

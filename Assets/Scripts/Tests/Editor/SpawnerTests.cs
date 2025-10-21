@@ -40,8 +40,7 @@ namespace ClashingArmies.Tests
                 {
                     foreach (var unit in unitsDict.Values)
                     {
-                        if (unit.UnitObject != null)
-                            Object.DestroyImmediate(unit.UnitObject);
+                        if (unit.GameObject != null) Object.DestroyImmediate(unit.GameObject);
                     }
                 }
             }

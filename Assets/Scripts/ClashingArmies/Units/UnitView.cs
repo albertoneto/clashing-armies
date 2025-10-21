@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using ClashingArmies.Effects;
 using UnityEngine;
 
@@ -5,19 +6,18 @@ namespace ClashingArmies.Units
 {
     public class UnitView
     {
-        public readonly Animator Animator;
-        
         private readonly EffectsService _effectsService;
         private readonly Unit _unit;
+        private readonly List<RotateAnimation> _rotateAnimations = new();
 
         public UnitView(Unit unit, PoolingSystem poolingSystem)
         {
             _unit = unit;
             
-            Animator = _unit.UnitObject.gameObject.GetComponentInChildren<Animator>();
-            
-            var renderer = _unit.UnitObject.gameObject.GetComponentInChildren<MeshRenderer>();
+            var renderer = _unit.GameObject.GetComponentInChildren<MeshRenderer>();
             renderer.material = _unit.data.material;
+
+            _rotateAnimations.AddRange(_unit.GameObject.GetComponents<RotateAnimation>());
             
             _effectsService = new EffectsService(poolingSystem, poolingSystem);
             _unit.health.OnDeath += DeathEffect;
@@ -37,6 +37,15 @@ namespace ClashingArmies.Units
             _effectsService.PlayEffect(_unit.data.deathSfxEffect, _unit.UnitObject.transform.position);
             
             _unit.health.OnDeath -= DeathEffect;
+        }
+
+        public void ToggleRotation()
+        {
+            foreach (var rotate in _rotateAnimations)
+            {
+                rotate.enabled = !rotate.enabled;
+            }
+            _unit.GameObject.transform.localRotation = Quaternion.identity;
         }
     }
 }

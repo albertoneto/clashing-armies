@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace ClashingArmies
@@ -8,6 +9,8 @@ namespace ClashingArmies
         [SerializeField] private float rotationSpeed = 90f;
         [SerializeField] private bool useUnscaledTime;
         
+        private Quaternion _originalRotation;
+
         private void Update()
         {
             float deltaTime = useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;

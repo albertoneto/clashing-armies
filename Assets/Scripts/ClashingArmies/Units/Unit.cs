@@ -7,6 +7,7 @@ namespace ClashingArmies.Units
     public class Unit : ICombatant
     {
         public string id;
+        
         public GameObject UnitObject;
         public UnitData data;
         public UnitController controller;

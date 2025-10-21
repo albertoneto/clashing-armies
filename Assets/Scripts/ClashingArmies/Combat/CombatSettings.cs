@@ -29,7 +29,9 @@ namespace ClashingArmies.Combat
 
         [Range(0f, 100f)] [Tooltip("Percentage of health the winner loses")]
         public float winnerDamagePercent = 0.1f;
-        
+
+        public LayerMask combatLayer;
+
         public int GetStrength(UnitType unitType)
         {
             var strength = unitStrengths.FirstOrDefault(s => s.unitType == unitType);
